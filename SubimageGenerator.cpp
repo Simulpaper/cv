@@ -34,14 +34,23 @@ cv::Mat SubimageGenerator::applyMedianBlur(const cv::Mat& img, int ksize) {
 std::vector<cv::Vec3i> SubimageGenerator::getCircles(const cv::Mat& img) {
     int rows = img.rows;
     int cols = img.cols;
-    std::vector<cv::Vec3i> circles;
-    cv::HoughCircles(img, circles, cv::HOUGH_GRADIENT, 1, std::min(rows / 8, cols / 8), 500, 10, 10, 45);
+    std::vector<cv::Vec3f> fCircles;
+    cv::HoughCircles(img, fCircles, cv::HOUGH_GRADIENT, 1, std::min(rows / 8, cols / 8), 500, 10, 10, 45);
 
     
-    if (circles.empty()) {
+    if (fCircles.empty()) {
         std::cout << "NO CIRCLES DETECTED!!" << std::endl;
         exit(EXIT_FAILURE);
     }
+    std::vector<cv::Vec3i> circles;
+
+    for (const cv::Vec3f& fCircle : fCircles) {
+        int x = static_cast<int>(std::round(fCircle[0]));
+        int y = static_cast<int>(std::round(fCircle[1]));
+        int r = static_cast<int>(std::round(fCircle[2]));
+        circles.push_back(cv::Vec3i(x, y, r));
+    }
+
     return circles;
 }
 
