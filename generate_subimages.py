@@ -143,7 +143,7 @@ def show_neighbors(img, neighbors):
     
 #     return node_map
 
-def get_subimages(img, edges, node_map):
+def get_subimages(img, edges):
     sub_images = []
 
     shave_off = 50
