@@ -16,3 +16,9 @@ struct Vec3iCompare {
         }
 };
 
+struct DatasetComponent {
+    std::string name;
+    cv::Mat image;
+    std::vector<cv::KeyPoint> keypoints;
+    cv::Mat descriptors;
+};

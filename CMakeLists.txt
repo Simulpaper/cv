@@ -4,12 +4,12 @@ PROJECT(SubimageGenerator)
 find_package(OpenCV REQUIRED)
 
 set(SOURCES
-    SubimageGenerator.cpp
+    DatasetParser.cpp
 
 )
 
 set(HEADERS
-    SubimageGenerator.hpp
+    DatasetParser.hpp
     HelperStructs.hpp
 )
 
