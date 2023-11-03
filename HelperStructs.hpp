@@ -22,3 +22,18 @@ struct DatasetComponent {
     std::vector<cv::KeyPoint> keypoints;
     cv::Mat descriptors;
 };
+
+struct ComponentMatch {
+    std::string name;
+    int numMatches;
+    float avgDist;
+};
+
+inline bool compareComponentMatches(const ComponentMatch& a, const ComponentMatch& b) {
+    if (a.numMatches > b.numMatches) {
+        return true;
+    } else if (a.numMatches == b.numMatches) {
+        return a.avgDist < b.avgDist;
+    }
+    return false;
+}

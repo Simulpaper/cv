@@ -46,20 +46,20 @@ std::vector<DatasetComponent> DatasetParser::getDataset(cv::Ptr<cv::ORB> orb, co
     return dataset;
 }
 
-int main() {
-    DatasetParser dsParser;
+// int main() {
+//     DatasetParser dsParser;
 
-    cv::Ptr<cv::ORB> orb = cv::ORB::create();
-    cv::Vec3i bilParams(5, 25, 25);
-    int tLower = 150;
-    int tUpper = 500;
+//     cv::Ptr<cv::ORB> orb = cv::ORB::create();
+//     cv::Vec3i bilParams(5, 25, 25);
+//     int tLower = 150;
+//     int tUpper = 500;
 
-    std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, bilParams, tLower, tUpper);
+//     std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, bilParams, tLower, tUpper);
 
-    // Print the results or process the dataset as needed
-    for (const auto& item : dataset) {
-        std::cout << "Component type: " << item.name << std::endl;
-    }
+//     // Print the results or process the dataset as needed
+//     for (const auto& item : dataset) {
+//         std::cout << "Component type: " << item.name << std::endl;
+//     }
 
-    return 0;
-}
+//     return 0;
+// }

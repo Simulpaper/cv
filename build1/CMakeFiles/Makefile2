@@ -81,12 +81,12 @@ clean: CMakeFiles/subimage_generator.dir/clean
 CMakeFiles/subimage_generator.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/cv/build1/CMakeFiles --progress-num=1,2 "Built target subimage_generator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/cv/build1/CMakeFiles --progress-num=1,2,3 "Built target subimage_generator"
 .PHONY : CMakeFiles/subimage_generator.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/subimage_generator.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/cv/build1/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/cv/build1/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/subimage_generator.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/cv/build1/CMakeFiles 0
 .PHONY : CMakeFiles/subimage_generator.dir/rule

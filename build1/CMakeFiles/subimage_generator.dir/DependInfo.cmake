@@ -8,7 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/ubuntu/cv/SubimageGenerator.cpp" "CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o" "gcc" "CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o.d"
+  "/home/ubuntu/cv/ComponentClassifier.cpp" "CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o" "gcc" "CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o.d"
+  "/home/ubuntu/cv/DatasetParser.cpp" "CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o" "gcc" "CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o.d"
   )
 
 # Targets to which this target links.

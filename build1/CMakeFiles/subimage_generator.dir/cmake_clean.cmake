@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o"
-  "CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o.d"
+  "CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o"
+  "CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o.d"
+  "CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o"
+  "CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o.d"
   "subimage_generator"
   "subimage_generator.pdb"
 )

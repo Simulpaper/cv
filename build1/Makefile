@@ -129,29 +129,53 @@ subimage_generator/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/build
 .PHONY : subimage_generator/fast
 
-SubimageGenerator.o: SubimageGenerator.cpp.o
-.PHONY : SubimageGenerator.o
+ComponentClassifier.o: ComponentClassifier.cpp.o
+.PHONY : ComponentClassifier.o
 
 # target to build an object file
-SubimageGenerator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o
-.PHONY : SubimageGenerator.cpp.o
+ComponentClassifier.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o
+.PHONY : ComponentClassifier.cpp.o
 
-SubimageGenerator.i: SubimageGenerator.cpp.i
-.PHONY : SubimageGenerator.i
+ComponentClassifier.i: ComponentClassifier.cpp.i
+.PHONY : ComponentClassifier.i
 
 # target to preprocess a source file
-SubimageGenerator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.i
-.PHONY : SubimageGenerator.cpp.i
+ComponentClassifier.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.i
+.PHONY : ComponentClassifier.cpp.i
 
-SubimageGenerator.s: SubimageGenerator.cpp.s
-.PHONY : SubimageGenerator.s
+ComponentClassifier.s: ComponentClassifier.cpp.s
+.PHONY : ComponentClassifier.s
 
 # target to generate assembly for a file
-SubimageGenerator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.s
-.PHONY : SubimageGenerator.cpp.s
+ComponentClassifier.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.s
+.PHONY : ComponentClassifier.cpp.s
+
+DatasetParser.o: DatasetParser.cpp.o
+.PHONY : DatasetParser.o
+
+# target to build an object file
+DatasetParser.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o
+.PHONY : DatasetParser.cpp.o
+
+DatasetParser.i: DatasetParser.cpp.i
+.PHONY : DatasetParser.i
+
+# target to preprocess a source file
+DatasetParser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/DatasetParser.cpp.i
+.PHONY : DatasetParser.cpp.i
+
+DatasetParser.s: DatasetParser.cpp.s
+.PHONY : DatasetParser.s
+
+# target to generate assembly for a file
+DatasetParser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/DatasetParser.cpp.s
+.PHONY : DatasetParser.cpp.s
 
 # Help Target
 help:
@@ -162,9 +186,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... subimage_generator"
-	@echo "... SubimageGenerator.o"
-	@echo "... SubimageGenerator.i"
-	@echo "... SubimageGenerator.s"
+	@echo "... ComponentClassifier.o"
+	@echo "... ComponentClassifier.i"
+	@echo "... ComponentClassifier.s"
+	@echo "... DatasetParser.o"
+	@echo "... DatasetParser.i"
+	@echo "... DatasetParser.s"
 .PHONY : help
 
 
