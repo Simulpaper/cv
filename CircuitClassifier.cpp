@@ -70,7 +70,7 @@ std::vector<std::vector<Component>> CircuitClassifier::getCircuits(std::string i
     cv::Ptr<cv::ORB> orb = cv::ORB::create();
     cv::Vec3i bilParams(5, 25, 25);
     int tLower = 150;
-    int tUpper = 500;
+    int tUpper = 400;
 
     std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, bilParams, tLower, tUpper);
 
@@ -79,8 +79,8 @@ std::vector<std::vector<Component>> CircuitClassifier::getCircuits(std::string i
     for (const auto& subimage : subimages) {
         ClassifiedEdge edge;
         // make the nodes just a pair of x, y coords instead of a Vec3i of x, y, r
-        edge.firstNode = std::pair(subimage.node1[0], subimage.node1[1]);
-        edge.secondNode = std::pair(subimage.node2[0], subimage.node2[1]);
+        edge.firstNode = std::pair<int, int>(subimage.node1[0], subimage.node1[1]);
+        edge.secondNode = std::pair<int, int>(subimage.node2[0], subimage.node2[1]);
         edge.classifications = compClassifier.getClassifications(orb, bilParams, tLower, tUpper, subimage.image, dataset);
 
         classifiedEdges.push_back(edge);
@@ -98,15 +98,15 @@ std::vector<std::vector<Component>> CircuitClassifier::getCircuits(std::string i
 int main() {
     CircuitClassifier cClassifier;
 
-    std::vector<std::vector<Component>> bestCircuits = cClassifier.getCircuits("../component_images/hough_circuit3a.jpg");
+    std::vector<std::vector<Component>> bestCircuits = cClassifier.getCircuits("../component_images/parallel.jpg");
     for (const auto& circuit : bestCircuits) {
         std::cout << "Circuit edges: [";
         for (const auto& component : circuit) {
             std::cout << "{" << "(" << std::to_string(component.firstNode.first) << ", " << std::to_string(component.firstNode.second) << "), ";
             std::cout << "(" << std::to_string(component.secondNode.first) << ", " << std::to_string(component.secondNode.second) << "), ";
-            std::cout << component.type << "}, ";
+            std::cout << component.type << "}" << std::endl;
         }
-        std::cout << "]" << std::endl;
+        std::cout << "]" << std::endl << std::endl;
     }
     return 0;
 }

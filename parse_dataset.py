@@ -16,6 +16,8 @@ def get_dataset(orb, bil_params, t_lower, t_upper):
         bil = dataset_img.copy()
         # bil = cv2.bilateralFilter(bil, bil_params[0], bil_params[1], bil_params[2]) 
         dataset_edge = cv2.Canny(bil, t_lower, t_upper)
+        # cv2.imshow(f"dataset img: {filename.name}", dataset_edge)
+        # cv2.waitKey(0)
         dataset_keypoints, dataset_descriptors = orb.detectAndCompute(dataset_edge, None)
         # if not dataset_keypoints:
         #     continue

@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 PROJECT(circuit_classifier)
 
+set(OpenCV_DIR "/mnt/c/Users/steph/Downloads/opencv/build/x64/vc16/lib")
+
 find_package(OpenCV REQUIRED)
 
 set(SOURCES

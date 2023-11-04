@@ -31,12 +31,12 @@ def generate_circuits(new_edges):
 
 if __name__ == "__main__":
     # list of [circle1, circle2, subimages]
-    edge_subimages = get_edges_subimages("component_images/hough_circuit3a.jpg")
+    edge_subimages = get_edges_subimages("component_images/parallel.jpg")
 
     bil_params = (5, 25, 25)
     # Setting parameter values for Canny
     t_lower = 150 # Lower Threshold
-    t_upper = 500 # Upper threshold
+    t_upper = 400 # Upper threshold
     orb = cv2.ORB_create()
     dataset = get_dataset(orb, bil_params, t_lower, t_upper)
     new_edges = [] #list of [n1_index, n2_index, classifications]
