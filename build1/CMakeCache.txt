@@ -145,7 +145,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=SubimageGenerator
+CMAKE_PROJECT_NAME:STATIC=circuit_classifier
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -220,6 +220,15 @@ SubimageGenerator_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 SubimageGenerator_SOURCE_DIR:STATIC=/home/ubuntu/cv
+
+//Value Computed by CMake
+circuit_classifier_BINARY_DIR:STATIC=/home/ubuntu/cv/build1
+
+//Value Computed by CMake
+circuit_classifier_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+circuit_classifier_SOURCE_DIR:STATIC=/home/ubuntu/cv
 
 
 ########################

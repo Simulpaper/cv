@@ -1,22 +1,26 @@
 cmake_minimum_required(VERSION 3.0)
-PROJECT(SubimageGenerator)
+PROJECT(circuit_classifier)
 
 find_package(OpenCV REQUIRED)
 
 set(SOURCES
+    CircuitClassifier.cpp
     ComponentClassifier.cpp
     DatasetParser.cpp
+    SubimageGenerator.cpp
 )
 
 set(HEADERS
+    CircuitClassifier.hpp
     ComponentClassifier.hpp
+    SubimageGenerator.hpp
     DatasetParser.hpp
     HelperStructs.hpp
 )
 
-add_executable(subimage_generator ${SOURCES} ${HEADERS})
+add_executable(circuit_classifier ${SOURCES} ${HEADERS})
 
-target_include_directories(subimage_generator PRIVATE ${CMAKE_SOURCE_DIR})
+target_include_directories(circuit_classifier PRIVATE ${CMAKE_SOURCE_DIR})
 
-target_link_libraries(subimage_generator ${OpenCV_LIBS})
+target_link_libraries(circuit_classifier ${OpenCV_LIBS})
 

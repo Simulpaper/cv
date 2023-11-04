@@ -117,24 +117,48 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named subimage_generator
+# Target rules for targets named circuit_classifier
 
 # Build rule for target.
-subimage_generator: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 subimage_generator
-.PHONY : subimage_generator
+circuit_classifier: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 circuit_classifier
+.PHONY : circuit_classifier
 
 # fast build rule for target.
-subimage_generator/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/build
-.PHONY : subimage_generator/fast
+circuit_classifier/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/build
+.PHONY : circuit_classifier/fast
+
+CircuitClassifier.o: CircuitClassifier.cpp.o
+.PHONY : CircuitClassifier.o
+
+# target to build an object file
+CircuitClassifier.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/CircuitClassifier.cpp.o
+.PHONY : CircuitClassifier.cpp.o
+
+CircuitClassifier.i: CircuitClassifier.cpp.i
+.PHONY : CircuitClassifier.i
+
+# target to preprocess a source file
+CircuitClassifier.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/CircuitClassifier.cpp.i
+.PHONY : CircuitClassifier.cpp.i
+
+CircuitClassifier.s: CircuitClassifier.cpp.s
+.PHONY : CircuitClassifier.s
+
+# target to generate assembly for a file
+CircuitClassifier.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/CircuitClassifier.cpp.s
+.PHONY : CircuitClassifier.cpp.s
 
 ComponentClassifier.o: ComponentClassifier.cpp.o
 .PHONY : ComponentClassifier.o
 
 # target to build an object file
 ComponentClassifier.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/ComponentClassifier.cpp.o
 .PHONY : ComponentClassifier.cpp.o
 
 ComponentClassifier.i: ComponentClassifier.cpp.i
@@ -142,7 +166,7 @@ ComponentClassifier.i: ComponentClassifier.cpp.i
 
 # target to preprocess a source file
 ComponentClassifier.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/ComponentClassifier.cpp.i
 .PHONY : ComponentClassifier.cpp.i
 
 ComponentClassifier.s: ComponentClassifier.cpp.s
@@ -150,7 +174,7 @@ ComponentClassifier.s: ComponentClassifier.cpp.s
 
 # target to generate assembly for a file
 ComponentClassifier.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/ComponentClassifier.cpp.s
 .PHONY : ComponentClassifier.cpp.s
 
 DatasetParser.o: DatasetParser.cpp.o
@@ -158,7 +182,7 @@ DatasetParser.o: DatasetParser.cpp.o
 
 # target to build an object file
 DatasetParser.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/DatasetParser.cpp.o
 .PHONY : DatasetParser.cpp.o
 
 DatasetParser.i: DatasetParser.cpp.i
@@ -166,7 +190,7 @@ DatasetParser.i: DatasetParser.cpp.i
 
 # target to preprocess a source file
 DatasetParser.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/DatasetParser.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/DatasetParser.cpp.i
 .PHONY : DatasetParser.cpp.i
 
 DatasetParser.s: DatasetParser.cpp.s
@@ -174,8 +198,32 @@ DatasetParser.s: DatasetParser.cpp.s
 
 # target to generate assembly for a file
 DatasetParser.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/subimage_generator.dir/build.make CMakeFiles/subimage_generator.dir/DatasetParser.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/DatasetParser.cpp.s
 .PHONY : DatasetParser.cpp.s
+
+SubimageGenerator.o: SubimageGenerator.cpp.o
+.PHONY : SubimageGenerator.o
+
+# target to build an object file
+SubimageGenerator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/SubimageGenerator.cpp.o
+.PHONY : SubimageGenerator.cpp.o
+
+SubimageGenerator.i: SubimageGenerator.cpp.i
+.PHONY : SubimageGenerator.i
+
+# target to preprocess a source file
+SubimageGenerator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/SubimageGenerator.cpp.i
+.PHONY : SubimageGenerator.cpp.i
+
+SubimageGenerator.s: SubimageGenerator.cpp.s
+.PHONY : SubimageGenerator.s
+
+# target to generate assembly for a file
+SubimageGenerator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/circuit_classifier.dir/build.make CMakeFiles/circuit_classifier.dir/SubimageGenerator.cpp.s
+.PHONY : SubimageGenerator.cpp.s
 
 # Help Target
 help:
@@ -185,13 +233,19 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... subimage_generator"
+	@echo "... circuit_classifier"
+	@echo "... CircuitClassifier.o"
+	@echo "... CircuitClassifier.i"
+	@echo "... CircuitClassifier.s"
 	@echo "... ComponentClassifier.o"
 	@echo "... ComponentClassifier.i"
 	@echo "... ComponentClassifier.s"
 	@echo "... DatasetParser.o"
 	@echo "... DatasetParser.i"
 	@echo "... DatasetParser.s"
+	@echo "... SubimageGenerator.o"
+	@echo "... SubimageGenerator.i"
+	@echo "... SubimageGenerator.s"
 .PHONY : help
 
 

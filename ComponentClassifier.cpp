@@ -65,18 +65,18 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
     return topThreeMatches;
 }
 
-int main() {
-    DatasetParser dsParser;
-    ComponentClassifier compClassifier;
+// int main() {
+//     DatasetParser dsParser;
+//     ComponentClassifier compClassifier;
 
-    cv::Ptr<cv::ORB> orb = cv::ORB::create();
-    cv::Vec3i bilParams(5, 25, 25);
-    int tLower = 150;
-    int tUpper = 500;
+//     cv::Ptr<cv::ORB> orb = cv::ORB::create();
+//     cv::Vec3i bilParams(5, 25, 25);
+//     int tLower = 150;
+//     int tUpper = 500;
 
-    std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, bilParams, tLower, tUpper);
-    cv::Mat img = cv::imread("../generated_components/component3.jpg");
-    std::vector<ComponentMatch> topThreeMatches = compClassifier.getClassifications(orb, bilParams, tLower, tUpper, img, dataset);
+//     std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, bilParams, tLower, tUpper);
+//     cv::Mat img = cv::imread("../generated_components/component3.jpg");
+//     std::vector<ComponentMatch> topThreeMatches = compClassifier.getClassifications(orb, bilParams, tLower, tUpper, img, dataset);
 
-    return 0;
-}
+//     return 0;
+// }

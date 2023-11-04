@@ -37,3 +37,24 @@ inline bool compareComponentMatches(const ComponentMatch& a, const ComponentMatc
     }
     return false;
 }
+
+struct Component {
+    std::pair<int, int> firstNode;
+    std::pair<int, int> secondNode;
+    std::string type;
+};
+
+struct CircuitClassification {
+    std::vector<Component> edges;
+    int score;
+};
+
+struct ClassifiedEdge {
+    std::pair<int, int> firstNode;
+    std::pair<int, int> secondNode;
+    std::vector<ComponentMatch> classifications;
+};
+
+inline bool compareCircuits(const CircuitClassification& a, const CircuitClassification& b) {
+    return a.score < b.score;
+}

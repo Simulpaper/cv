@@ -49,5 +49,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/subimage_generator.dir/DependInfo.cmake"
+  "CMakeFiles/circuit_classifier.dir/DependInfo.cmake"
   )

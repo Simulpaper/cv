@@ -69,10 +69,24 @@ include CMakeFiles/subimage_generator.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/subimage_generator.dir/flags.make
 
+CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.o: CMakeFiles/subimage_generator.dir/flags.make
+CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.o: ../CircuitClassifier.cpp
+CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.o: CMakeFiles/subimage_generator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/cv/build1/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.o -MF CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.o.d -o CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.o -c /home/ubuntu/cv/CircuitClassifier.cpp
+
+CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/cv/CircuitClassifier.cpp > CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.i
+
+CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/cv/CircuitClassifier.cpp -o CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.s
+
 CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o: CMakeFiles/subimage_generator.dir/flags.make
 CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o: ../ComponentClassifier.cpp
 CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o: CMakeFiles/subimage_generator.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/cv/build1/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/cv/build1/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o -MF CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o.d -o CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o -c /home/ubuntu/cv/ComponentClassifier.cpp
 
 CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.i: cmake_force
@@ -86,7 +100,7 @@ CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.s: cmake_force
 CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o: CMakeFiles/subimage_generator.dir/flags.make
 CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o: ../DatasetParser.cpp
 CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o: CMakeFiles/subimage_generator.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/cv/build1/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/cv/build1/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o -MF CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o.d -o CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o -c /home/ubuntu/cv/DatasetParser.cpp
 
 CMakeFiles/subimage_generator.dir/DatasetParser.cpp.i: cmake_force
@@ -97,16 +111,34 @@ CMakeFiles/subimage_generator.dir/DatasetParser.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/subimage_generator.dir/DatasetParser.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/cv/DatasetParser.cpp -o CMakeFiles/subimage_generator.dir/DatasetParser.cpp.s
 
+CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o: CMakeFiles/subimage_generator.dir/flags.make
+CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o: ../SubimageGenerator.cpp
+CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o: CMakeFiles/subimage_generator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/cv/build1/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o -MF CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o.d -o CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o -c /home/ubuntu/cv/SubimageGenerator.cpp
+
+CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/cv/SubimageGenerator.cpp > CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.i
+
+CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/cv/SubimageGenerator.cpp -o CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.s
+
 # Object files for target subimage_generator
 subimage_generator_OBJECTS = \
+"CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.o" \
 "CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o" \
-"CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o"
+"CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o" \
+"CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o"
 
 # External object files for target subimage_generator
 subimage_generator_EXTERNAL_OBJECTS =
 
+subimage_generator: CMakeFiles/subimage_generator.dir/CircuitClassifier.cpp.o
 subimage_generator: CMakeFiles/subimage_generator.dir/ComponentClassifier.cpp.o
 subimage_generator: CMakeFiles/subimage_generator.dir/DatasetParser.cpp.o
+subimage_generator: CMakeFiles/subimage_generator.dir/SubimageGenerator.cpp.o
 subimage_generator: CMakeFiles/subimage_generator.dir/build.make
 subimage_generator: /usr/lib/x86_64-linux-gnu/libopencv_stitching.so.4.5.4d
 subimage_generator: /usr/lib/x86_64-linux-gnu/libopencv_alphamat.so.4.5.4d
@@ -163,7 +195,7 @@ subimage_generator: /usr/lib/x86_64-linux-gnu/libopencv_photo.so.4.5.4d
 subimage_generator: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.4.5.4d
 subimage_generator: /usr/lib/x86_64-linux-gnu/libopencv_core.so.4.5.4d
 subimage_generator: CMakeFiles/subimage_generator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ubuntu/cv/build1/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable subimage_generator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ubuntu/cv/build1/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable subimage_generator"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/subimage_generator.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

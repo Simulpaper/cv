@@ -76,7 +76,6 @@ double SubimageGenerator::distance(const cv::Vec3i& circle1, const cv::Vec3i& ci
 }
 
 std::vector<cv::Vec3i> SubimageGenerator::getNeighbors(const cv::Vec3i& circle, const std::vector<cv::Vec3i>& circles) {
-    // 
     std::vector<cv::Vec3i> neighbors(4, cv::Vec3i(0, 0, -1));
     std::vector<double> bestDistances(4, 0);
     int thisX = circle[0];
@@ -249,11 +248,11 @@ std::vector<ComponentSubimage> SubimageGenerator::generateSubimages(const std::s
     return subImages;
 }
 
-int main() {
-    SubimageGenerator generator;
+// int main() {
+//     SubimageGenerator generator;
 
-    std::vector<ComponentSubimage> subImages = generator.generateSubimages("../component_images/hough_circuit3a.jpg");
+//     std::vector<ComponentSubimage> subImages = generator.generateSubimages("../component_images/hough_circuit3a.jpg");
     
 
-    return 0;
-}
+//     return 0;
+// }
