@@ -69,8 +69,8 @@ std::vector<std::vector<Component>> CircuitClassifier::getCircuits(std::string i
 
     cv::Ptr<cv::ORB> orb = cv::ORB::create();
     cv::Vec3i bilParams(5, 25, 25);
-    int tLower = 150;
-    int tUpper = 400;
+    int tLower = 100;
+    int tUpper = 300;
 
     std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, bilParams, tLower, tUpper);
 
@@ -98,7 +98,7 @@ std::vector<std::vector<Component>> CircuitClassifier::getCircuits(std::string i
 int main() {
     CircuitClassifier cClassifier;
 
-    std::vector<std::vector<Component>> bestCircuits = cClassifier.getCircuits("../component_images/parallel.jpg");
+    std::vector<std::vector<Component>> bestCircuits = cClassifier.getCircuits("../component_images/demo.jpg");
     for (const auto& circuit : bestCircuits) {
         std::cout << "Circuit edges: [" << std::endl;
         for (const auto& component : circuit) {

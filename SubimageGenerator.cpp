@@ -16,18 +16,24 @@ cv::Mat SubimageGenerator::loadImage(const std::string& filename) {
     else {
         cv::resize(img, img, cv::Size(1080, 1920), cv::INTER_AREA);
     }
+    cv::imshow("Grayscaled img", img);
+    cv::waitKey(0);
     return img;
 }
 
 cv::Mat SubimageGenerator::applyThreshold(const cv::Mat& img, double thresholdValue) {
     cv::Mat binaryImg = img.clone();
     cv::threshold(binaryImg, binaryImg, thresholdValue, 255, cv::THRESH_BINARY);
+    cv::imshow("Thresholded img", binaryImg);
+    cv::waitKey(0);
     return binaryImg;
 }
 
 cv::Mat SubimageGenerator::applyMedianBlur(const cv::Mat& img, int ksize) {
     cv::Mat blurredImg = img.clone();
     cv::medianBlur(blurredImg, blurredImg, ksize);
+    cv::imshow("Median-blurred img", blurredImg);
+    cv::waitKey(0);
     return blurredImg;
 }
 
