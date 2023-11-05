@@ -1,3 +1,0 @@
-/home/ubuntu/cv/build1/CMakeFiles/circuit_classifier.dir
-/home/ubuntu/cv/build1/CMakeFiles/edit_cache.dir
-/home/ubuntu/cv/build1/CMakeFiles/rebuild_cache.dir
