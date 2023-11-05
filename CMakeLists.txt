@@ -3,6 +3,9 @@ PROJECT(circuit_classifier)
 
 set(OpenCV_DIR "/mnt/c/Users/steph/Downloads/opencv/build/x64/vc16/lib")
 
+SET(GCC_COVERAGE_COMPILE_FLAGS "-std=c++17")
+add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
+
 find_package(OpenCV REQUIRED)
 
 set(SOURCES
