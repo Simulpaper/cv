@@ -58,6 +58,7 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
             std::cout << "Component match: " << match.name  << " with num matches: " << match.numMatches << " and avg dist: " << match.avgDist << std::endl;
         }
         if (haveComponents.size() == 3) {
+            std::cout << std::endl;
             break;
         }
     }

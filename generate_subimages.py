@@ -32,7 +32,7 @@ def get_circles(img):
     cols = img.shape[1]
     circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, min(rows / 8, cols / 8),
     param1=500, param2=10,
-    minRadius=10, maxRadius=45)
+    minRadius=15, maxRadius=60)
 
     if circles is not None:
         circles = circles.astype(int)
@@ -202,11 +202,11 @@ def get_edges_subimages(filename):
 
     sub_images = get_subimages(user_img, edges)
 
-    for i in range(len(sub_images)):
-        cv2.imshow(f"component{i}", sub_images[i][2])
-        cv2.waitKey(0)
-    #   cv2.imwrite(f"generated_components/component{i}.jpg", sub_images[i][2])
+    # for i in range(len(sub_images)):
+    #     cv2.imshow(f"component{i}", sub_images[i][2])
+    #     cv2.waitKey(0)
+        # cv2.imwrite(f"generated_components/component{i}.jpg", sub_images[i][2])
     return sub_images
 
 if __name__ == "__main__":
-    get_edges_subimages("component_images/hough_circuit3a.jpg")
+    get_edges_subimages("component_images/demo.jpg")

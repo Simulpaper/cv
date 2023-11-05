@@ -100,7 +100,7 @@ int main() {
 
     std::vector<std::vector<Component>> bestCircuits = cClassifier.getCircuits("../component_images/parallel.jpg");
     for (const auto& circuit : bestCircuits) {
-        std::cout << "Circuit edges: [";
+        std::cout << "Circuit edges: [" << std::endl;
         for (const auto& component : circuit) {
             std::cout << "{" << "(" << std::to_string(component.firstNode.first) << ", " << std::to_string(component.firstNode.second) << "), ";
             std::cout << "(" << std::to_string(component.secondNode.first) << ", " << std::to_string(component.secondNode.second) << "), ";
