@@ -1,3 +1,0 @@
-/home/ubuntu/cv/build2/CMakeFiles/subimage_generator.dir
-/home/ubuntu/cv/build2/CMakeFiles/edit_cache.dir
-/home/ubuntu/cv/build2/CMakeFiles/rebuild_cache.dir
