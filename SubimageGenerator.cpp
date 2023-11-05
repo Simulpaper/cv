@@ -124,7 +124,7 @@ void SubimageGenerator::showNeighbors(const cv::Mat& img, const std::map<cv::Vec
         cv::Mat new_img = img.clone();
 
         // Draw the circle in red
-        cv::circle(new_img, cv::Point(circle[0], circle[1]), circle[2], cv::Scalar(0, 0, 255), 3);
+        cv::circle(new_img, cv::Point(circle[0], circle[1]), circle[2], cv::Scalar(128, 128, 128), 3);
 
         // Draw the neighbors in white
         for (const cv::Vec3i& neighbor : circle_neighbors) {
