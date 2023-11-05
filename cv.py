@@ -49,7 +49,9 @@ if __name__ == "__main__":
     
     possible_circuits = generate_circuits(new_edges)
     
-    print(possible_circuits[:5])
+    for i in range(5):
+        print(possible_circuits[i])
+        print("\n")
 
     # take the top five and create netlists for each one
 
