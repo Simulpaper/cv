@@ -232,7 +232,7 @@ std::vector<ComponentSubimage> SubimageGenerator::generateSubimages(const std::s
     std::cout << "Applied median blur" << std::endl;
     std::vector<cv::Vec3i> circles = this->getCircles(medBlurredImg);
     std::cout << "got circles" << std::endl;
-    // this->showCircles(userImg, circles);
+    this->showCircles(userImg, circles);
     
     // get neighbors: 
     std::map<cv::Vec3i, std::vector<cv::Vec3i>, Vec3iCompare> neighbors;
@@ -240,17 +240,17 @@ std::vector<ComponentSubimage> SubimageGenerator::generateSubimages(const std::s
         std::vector<cv::Vec3i> circle_neighbors = this->getNeighbors(circle, circles);
         neighbors[circle] = circle_neighbors;
     }
-    // this->showNeighbors(userImg, neighbors);
+    this->showNeighbors(userImg, neighbors);
 
 
     std::vector<std::pair<cv::Vec3i, cv::Vec3i>> edges = this->getEdges(neighbors);
 
     std::vector<ComponentSubimage> subImages = getSubimages(userImg, edges);
 
-    // for (int i = 0; i < subImages.size(); ++i) {
-    //     cv::imshow("Component " + std::to_string(i), subImages[i].image);
-    //     cv::waitKey(0);
-    // }
+    for (int i = 0; i < subImages.size(); ++i) {
+        cv::imshow("Component " + std::to_string(i), subImages[i].image);
+        cv::waitKey(0);
+    }
     return subImages;
 }
 
