@@ -22,9 +22,23 @@ std::vector<DatasetComponent> DatasetParser::getDataset(cv::Ptr<cv::ORB> orb, co
             continue;
         }
 
-        cv::Mat datasetImg = cv::imread(entry.path().string());
+        cv::Mat datasetImg = cv::imread(entry.path().string(), cv::IMREAD_GRAYSCALE);
         cv::Mat bil = datasetImg;
-        // cv::bilateralFilter(datasetImg, bil, bilParams[0], bilParams[1], bilParams[2]);
+        
+        // Median Blur
+        cv::medianBlur(bil, bil, 3);
+
+        // Non-Local Means Denoising
+        cv::fastNlMeansDenoising(bil, bil, 30, 11, 21);
+
+        // Adaptive Thresholding
+        cv::adaptiveThreshold(bil, bil, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 191, 5);
+
+        // Median Blur Again
+        cv::medianBlur(bil, bil, 3);
+
+        // cv::imshow("Preprocessed", bil);
+        // cv::waitKey(0);
 
         cv::Mat datasetEdge;
         cv::Canny(bil, datasetEdge, tLower, tUpper);
