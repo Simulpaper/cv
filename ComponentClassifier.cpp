@@ -34,6 +34,22 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
     // cv::imshow("Canny-edged image", edgeImage);
     // cv::waitKey(0);
 
+    int rows = edgeImage.rows;
+    int cols = edgeImage.cols;
+
+    cv::Mat circles;
+    cv::HoughCircles(edgeImage, circles, cv::HOUGH_GRADIENT, 1, std::max(rows, cols),
+                     300, 30, (std::min(rows, cols) / 5), (std::min(rows, cols) / 2));
+
+    std::set<std::string> toCompare;
+    if (!circles.empty()) {
+        toCompare = {"voltage_source", "current_source", "lightbulb"};
+        std::cout << "Circle in component detected!" << std::endl;
+    } else {
+        toCompare = {"wire", "resistor", "diode", "switch"};
+    }
+
+
     std::vector<cv::KeyPoint> keypoints;
     cv::Mat descriptors;
     orb->detectAndCompute(edgeImage, cv::noArray(), keypoints, descriptors);
@@ -43,6 +59,9 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
     std::vector<ComponentMatch> datasetMatches;
 
     for (const auto& item : dataset) {
+        if (toCompare.count(item.name) == 0) {
+            continue;
+        }
         std::vector<cv::DMatch> matches;
         matcher.match(descriptors, item.descriptors, matches, cv::Mat());
         float avgDist = 0;
