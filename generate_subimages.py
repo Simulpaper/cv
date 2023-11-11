@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 
 def load_image(filename):
     img = cv2.imread(filename, cv2.IMREAD_GRAYSCALE) # Read image
@@ -9,30 +10,32 @@ def load_image(filename):
         img = cv2.resize(img, (1080, 1920), interpolation=cv2.INTER_AREA)
     # print(f"Height: {img.shape[0]}")
     # print(f"Width: {img.shape[1]}")
-    # cv2.imshow("original img", img)
-    # cv2.waitKey(0)
+    cv2.imshow("original img", img)
+    cv2.waitKey(0)
     return img
 
-def apply_threshold(img, threshold_value=60):
+def apply_threshold(img, threshold_value=80):
     binary_img = img.copy()
+    # binary_img = cv2.adaptiveThreshold(binary_img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+    #                                       cv2.THRESH_BINARY, 199, 5) 
     binary_img = cv2.threshold(binary_img, threshold_value, 255, cv2.THRESH_BINARY)[1]
-    # cv2.imshow("binary img", binary_img)
-    # cv2.waitKey(0)
+    cv2.imshow("binary img", binary_img)
+    cv2.waitKey(0)
     return binary_img
 
-def apply_median_blur(img, ksize=23):
+def apply_median_blur(img, ksize=31):
     b_img = img.copy()
     b_img = cv2.medianBlur(b_img, ksize)
-    # cv2.imshow("blur img", b_img)
-    # cv2.waitKey(0)
+    cv2.imshow("blur img", b_img)
+    cv2.waitKey(0)
     return b_img
 
 def get_circles(img):
     rows = img.shape[0]
     cols = img.shape[1]
     circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, min(rows / 8, cols / 8),
-    param1=500, param2=10,
-    minRadius=15, maxRadius=60)
+    param1=200, param2=8,
+    minRadius=5, maxRadius=80)
 
     if circles is not None:
         circles = circles.astype(int)
@@ -143,30 +146,100 @@ def show_neighbors(img, neighbors):
     
 #     return node_map
 
+
 def get_subimages(img, edges):
     sub_images = []
 
-    shave_off = 50
-    add_size = 90 
+    cut_off = 50
+    binary_img = img.copy()
+    binary_img = cv2.threshold(binary_img, 100, 255, cv2.THRESH_BINARY)[1]
 
     for circle1, circle2 in edges:
-
-        # if component is horizontal
-        if abs(circle1[0] - circle2[0]) > abs(circle1[1] - circle2[1]):
-            x_min = min(circle1[0], circle2[0]) + shave_off
-            x_max = max(circle1[0], circle2[0]) - shave_off
-            y_min = max(min(circle1[1], circle2[1]) - add_size, 0)
-            y_max = min(max(circle1[1], circle2[1]) + add_size, img.shape[0])
-        # else component is vertical
+        isHorizontal = abs(circle1[0] - circle2[0]) > abs(circle1[1] - circle2[1])
+        if isHorizontal:
+            leftX = min(circle1[0], circle2[0]) + 50
+            rightX = max(circle1[0], circle2[0]) - 49
+            print(f"Left: {leftX} right: {rightX}")
+            # pick one of the y coordinates
+            y = min(circle1[1], circle2[1]) + 30
+            while y < img.shape[0]:
+                has_black = False
+                for x in range(leftX, rightX):
+                    if binary_img[y, x] < 255:
+                        has_black = True
+                        break
+                if has_black:
+                    y += 2
+                else:
+                    break
+            upper_y = min(y + 20, img.shape[0])
+            y = min(circle1[1], circle2[1]) - 30
+            while y > 0:
+                has_black = False
+                for x in range(leftX, rightX):
+                    if binary_img[y, x] < 255:
+                        has_black = True
+                        break
+                if has_black:
+                    y -= 2
+                else:
+                    break
+            lower_y = max(0, y - 20)
+            sub_image = img[lower_y: upper_y, leftX:rightX]
+            sub_images.append([circle1, circle2, sub_image])
         else:
-            x_min = max(min(circle1[0], circle2[0]) - add_size, 0)
-            x_max = min(max(circle1[0], circle2[0]) + add_size, img.shape[1])
-            y_min = min(circle1[1], circle2[1]) + shave_off
-            y_max = max(circle1[1], circle2[1]) - shave_off
+            lowerY = min(circle1[1], circle2[1]) + 50
+            upperY = max(circle1[1], circle2[1]) - 49
+            # pick one of the x coordinates
+            x = min(circle1[0], circle2[0]) + 30
+            while x < img.shape[1]:
+                has_black = False
+                for y in range(lowerY, upperY):
+                    if binary_img[y, x] < 255:
+                        has_black = True
+                        break
+                if has_black:
+                    x += 2
+                else:
+                    break
+            right_x = min(x + 20, img.shape[1])
+            x = min(circle1[0], circle2[0]) - 30
+            while x > 0:
+                has_black = False
+                for y in range(lowerY, upperY):
+                    if binary_img[y, x] < 255:
+                        has_black = True
+                        break
+                if has_black:
+                    x -= 2
+                else:
+                    break
+            left_x = max(0, x - 20)
+            sub_image = img[lowerY: upperY, left_x:right_x]
+            sub_images.append([circle1, circle2, sub_image])
 
-        sub_image = img[y_min:y_max, x_min:x_max]
-        # first node, second node, subimage
-        sub_images.append([circle1, circle2, sub_image])
+
+    # shave_off = 50
+    # add_size = 90 
+
+    # for circle1, circle2 in edges:
+
+    #     # if component is horizontal
+    #     if abs(circle1[0] - circle2[0]) > abs(circle1[1] - circle2[1]):
+    #         x_min = min(circle1[0], circle2[0]) + shave_off
+    #         x_max = max(circle1[0], circle2[0]) - shave_off
+    #         y_min = max(min(circle1[1], circle2[1]) - add_size, 0)
+    #         y_max = min(max(circle1[1], circle2[1]) + add_size, img.shape[0])
+    #     # else component is vertical
+    #     else:
+    #         x_min = max(min(circle1[0], circle2[0]) - add_size, 0)
+    #         x_max = min(max(circle1[0], circle2[0]) + add_size, img.shape[1])
+    #         y_min = min(circle1[1], circle2[1]) + shave_off
+    #         y_max = max(circle1[1], circle2[1]) - shave_off
+
+    #     sub_image = img[y_min:y_max, x_min:x_max]
+    #     # first node, second node, subimage
+    #     sub_images.append([circle1, circle2, sub_image])
     return sub_images
 
 def get_edges_subimages(filename):
@@ -202,11 +275,11 @@ def get_edges_subimages(filename):
 
     sub_images = get_subimages(user_img, edges)
 
-    # for i in range(len(sub_images)):
-    #     cv2.imshow(f"component{i}", sub_images[i][2])
-    #     cv2.waitKey(0)
-    #     cv2.imwrite(f"generated_components/component{i}.jpg", sub_images[i][2])
+    for i in range(len(sub_images)):
+        cv2.imshow(f"component{i}", sub_images[i][2])
+        cv2.waitKey(0)
+        # cv2.imwrite(f"generated_components/component{i}.jpg", sub_images[i][2])
     return sub_images
 
 if __name__ == "__main__":
-    get_edges_subimages("component_images/demo.jpg")
+    get_edges_subimages("component_images/bad_demo.jpg")

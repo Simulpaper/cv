@@ -7,8 +7,29 @@ from parse_dataset import get_dataset
 def get_component_classifications(orb, bil_params, t_lower, t_upper, img, dataset):
     
     bil = img.copy()
-    # bil = cv2.bilateralFilter(bil,bil_params[0], bil_params[1], bil_params[2]) 
-    # cv2.imshow('Bilateral Filtering', bil) 
+    bil = cv2.medianBlur(bil, 3)
+    # cv2.imshow('median blurred', bil) 
+    # cv2.waitKey(0)
+
+    bil = cv2.fastNlMeansDenoising(bil, None, 30, 11, 21)
+    # cv2.imshow('denoise', bil) 
+    # cv2.waitKey(0)
+
+    bil = cv2.adaptiveThreshold(bil, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+                                        cv2.THRESH_BINARY, 191, 5) 
+    # cv2.imshow('adapt thresh', bil) 
+    # cv2.waitKey(0)
+
+    bil = cv2.medianBlur(bil, 3)
+    # cv2.imshow('med blurr again', bil) 
+    # cv2.waitKey(0)
+
+    # bil = cv2.fastNlMeansDenoising(bil, None, 30, 11, 21)
+    # cv2.imshow('denoise', bil) 
+    # cv2.waitKey(0)
+
+    # bil = cv2.medianBlur(bil, 3)
+    # cv2.imshow('med blurr again', bil) 
     # cv2.waitKey(0)
 
     # Applying the Canny Edge filter
@@ -16,6 +37,19 @@ def get_component_classifications(orb, bil_params, t_lower, t_upper, img, datase
 
     cv2.imshow(f"Canny edged", input_edge)
     cv2.waitKey(0)
+
+    rows = img.shape[0]
+    cols = img.shape[1]
+    circles = cv2.HoughCircles(input_edge, cv2.HOUGH_GRADIENT, 1, max(rows, cols),
+    param1=300, param2=30,
+    minRadius=(min(rows, cols) // 5), maxRadius=(min(rows, cols) // 2))
+
+    
+    if circles is not None:
+        toCompare = set(["voltage_source", "current_source", "lightbulb"])
+        print("Circle in component detected!")
+    else: 
+        toCompare = set(["wire", "resistor", "diode", "switch"])
 
     # Now detect the keypoints and compute the descriptors for the query image and train image
     input_keypoints, input_descriptors = orb.detectAndCompute(input_edge,None)
@@ -28,6 +62,8 @@ def get_component_classifications(orb, bil_params, t_lower, t_upper, img, datase
     # bestMatch = (filename, num_matches, avg_dist)
     bestMatch = None
     for filename, edge_img, keypoints, descriptors in dataset:
+        if filename not in toCompare:
+            continue
         matches = matcher.match(input_descriptors, descriptors)
         # matches = sorted(matches, key = lambda x : x.distance)
         num_matches = len(matches)
@@ -45,7 +81,7 @@ def get_component_classifications(orb, bil_params, t_lower, t_upper, img, datase
         
         dataset_matches.append((filename, num_matches, avg_dist))
         
-    dataset_matches.sort(key = lambda x: (-x[1], x[2]))
+    dataset_matches.sort(key = lambda x: x[2])
     # print(dataset_matches)
 
     top_three_matches = []
@@ -70,11 +106,11 @@ def get_component_classifications(orb, bil_params, t_lower, t_upper, img, datase
 
 
 if __name__ == "__main__":
-    img = cv2.imread(f"generated_components/component3.jpg") # Read image
+    img = cv2.imread(f"generated_components/component2.jpg", cv2.IMREAD_GRAYSCALE) # Read image
     bil_params = (5, 200, 200)
     # Setting parameter values for Canny
     t_lower = 200 # Lower Threshold
-    t_upper = 500 # Upper threshold
+    t_upper = 400 # Upper threshold
     orb = cv2.ORB_create()
     dataset = get_dataset(orb, bil_params, t_lower, t_upper)
     classifications = get_component_classifications(orb, bil_params, t_lower, t_upper, img, dataset)

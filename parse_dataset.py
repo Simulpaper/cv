@@ -2,6 +2,8 @@ import cv2
 import sys
 import os
 import re
+import numpy as np
+import random as rng
 
 def get_dataset(orb, bil_params, t_lower, t_upper):
     dataset_dir = "component_dataset"
@@ -12,12 +14,40 @@ def get_dataset(orb, bil_params, t_lower, t_upper):
     for filename in os.scandir(dataset_dir):
         if not filename.is_file():
             continue
-        dataset_img = cv2.imread(f"{dataset_dir}/{filename.name}")
+        dataset_img = cv2.imread(f"{dataset_dir}/{filename.name}", cv2.IMREAD_GRAYSCALE)
         bil = dataset_img.copy()
-        # bil = cv2.bilateralFilter(bil, bil_params[0], bil_params[1], bil_params[2]) 
+        # cv2.imshow('original', bil)
+        # cv2.waitKey(0)
+
+        bil = cv2.medianBlur(bil, 3)
+        # cv2.imshow('median blurred', bil) 
+        # cv2.waitKey(0)
+
+        bil = cv2.fastNlMeansDenoising(bil, None, 30, 11, 21)
+        # cv2.imshow('denoise', bil) 
+        # cv2.waitKey(0)
+
+        bil = cv2.adaptiveThreshold(bil, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+                                            cv2.THRESH_BINARY, 191, 5) 
+        # cv2.imshow('adapt thresh', bil) 
+        # cv2.waitKey(0)
+
+        bil = cv2.medianBlur(bil, 3)
+        # cv2.imshow('med blurr again', bil) 
+        # cv2.waitKey(0)
+
+        # bil = cv2.fastNlMeansDenoising(bil, None, 30, 11, 21)
+        # cv2.imshow('denoise', bil) 
+        # cv2.waitKey(0)
+
+        # bil = cv2.medianBlur(bil, 3)
+        # cv2.imshow('med blurr again', bil) 
+        # cv2.waitKey(0)
+        
         dataset_edge = cv2.Canny(bil, t_lower, t_upper)
-        cv2.imshow(f"dataset img: {filename.name}", dataset_edge)
-        cv2.waitKey(0)
+        # cv2.imshow(f"dataset img: {filename.name}", dataset_edge)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows() 
         dataset_keypoints, dataset_descriptors = orb.detectAndCompute(dataset_edge, None)
         # if not dataset_keypoints:
         #     continue
@@ -29,3 +59,5 @@ def get_dataset(orb, bil_params, t_lower, t_upper):
 
     # print(f"Dataset number of components: {dataset_size};  avg number of descriptors: {num_descriptors // dataset_size}; avg number of bytes per component: {dataset_bytes // dataset_size}; total bytes: {dataset_bytes}")
     return dataset
+
+
