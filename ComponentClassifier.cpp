@@ -42,13 +42,40 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
                      300, 30, (std::min(rows, cols) / 5), (std::min(rows, cols) / 2));
 
     std::set<std::string> toCompare;
+    // if is a component with a circle
     if (!circles.empty()) {
         toCompare = {"voltage_source", "current_source", "lightbulb"};
         std::cout << "Circle in component detected!" << std::endl;
+    // is a component with no circle
     } else {
-        toCompare = {"wire", "resistor", "diode", "switch"};
-    }
+        std::vector<cv::Vec4i> linesP;
+        cv::HoughLinesP(255 - bil, linesP, 2, CV_PI / 180, 50, 50, 10);
+        int lowX = cols;
+        int highX = 0;
+        int lowY = rows;
+        int highY = 0;
 
+        if (!linesP.empty()) {
+            for (int i = 0; i < linesP.size(); i++) {
+                cv::Vec4i l = linesP[i];
+                lowX = std::min(lowX, std::min(l[0], l[2]));
+                lowY = std::min(lowY, std::min(l[1], l[3]));
+                highX = std::max(highX, std::max(l[0], l[2]));
+                highY = std::max(highY, std::max(l[1], l[3]));
+            }
+
+            // img is vertical && horizontal diff is greater than width/3 OR img is horizontal && vertical diff is greater than height/3
+            if ((rows > cols && highX - lowX > cols / 3) ||
+                (cols > rows && highY - lowY > rows / 3)) {
+                toCompare = {"resistor", "diode", "switch"};
+            } else {
+                toCompare = {"wire"};
+            }
+        // if couldn't detect any lines, any of these components are fair game for comparisons
+        } else {
+            toCompare = {"wire", "resistor", "diode", "switch"};
+        }
+    }
 
     std::vector<cv::KeyPoint> keypoints;
     cv::Mat descriptors;

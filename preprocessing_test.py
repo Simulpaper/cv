@@ -4,21 +4,21 @@ import os
 
 def process_image(img):
     bil = cv2.medianBlur(img, 3)
-    cv2.imshow('median blurred', bil) 
-    cv2.waitKey(0)
+    # cv2.imshow('median blurred', bil) 
+    # cv2.waitKey(0)
 
     bil = cv2.fastNlMeansDenoising(bil, None, 30, 11, 21)
-    cv2.imshow('denoise', bil) 
-    cv2.waitKey(0)
+    # cv2.imshow('denoise', bil) 
+    # cv2.waitKey(0)
 
     bil = cv2.adaptiveThreshold(bil, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
                                           cv2.THRESH_BINARY, 191, 5) 
-    cv2.imshow('adapt thresh', bil) 
-    cv2.waitKey(0)
+    # cv2.imshow('adapt thresh', bil) 
+    # cv2.waitKey(0)
 
     bil = cv2.medianBlur(bil, 5)
-    cv2.imshow('med blurr again', bil) 
-    cv2.waitKey(0)
+    # cv2.imshow('med blurr again', bil) 
+    # cv2.waitKey(0)
 
     # bil = cv2.GaussianBlur(bil,(5,5),0)
     # cv2.imshow('gaussian', bil) 
@@ -45,29 +45,42 @@ def process_image(img):
     if circles is not None:
         circles = circles.astype(int)
         circles = circles[0]
+        circles_img = bil
+        # for i in range(len(circles)):
+        #     circles_img = cv2.circle(circles_img, (circles[i][0], circles[i][1]), circles[i][2], (0, 100, 100), 3)
+        
+        # cv2.imshow("circles", circles_img)
+        # cv2.waitKey(0)
     else:
         print("NO CIRCLES DETECTED!!")
+        linesP = cv2.HoughLinesP(255 - bil, 2, np.pi / 180, 50, None, 50, 10)
+        blankImg = np.zeros((bil.shape[0], bil.shape[1]), dtype = np.uint8)
+        if linesP is not None:
+            isWire = True
+            lowX = bil.shape[1]
+            highX = 0
+            lowY = bil.shape[0]
+            highY = 0
+            for i in range(len(linesP)):
+                l = linesP[i][0]
+                lowX = min(lowX, l[0])
+                lowX = min(lowX, l[2])
+                lowY = min(lowY, l[1])
+                lowY = min(lowY, l[3])
+                highX = max(highX, l[0])
+                highX = max(highX, l[2])
+                highY = max(highY, l[1])
+                highY = max(highY, l[3])
+                cv2.line(blankImg, (l[0], l[1]), (l[2], l[3]), 255, 1, cv2.LINE_AA)
+
+        # if vertical image and 
+        if (bil.shape[0] > bil.shape[1] and highX - lowX > bil.shape[1] // 3)  or (bil.shape[1] > bil.shape[0] and highY - lowY > bil.shape[0] // 3):
+            isWire = False
+        print(f"Is a wire: {isWire}")
+        cv2.imshow("Detected Lines (in red) - Probabilistic Line Transform", blankImg)
+        cv2.waitKey(0)
         cv2.destroyAllWindows() 
-        return
-
-    circles_img = bil
-    for i in range(len(circles)):
-        circles_img = cv2.circle(circles_img, (circles[i][0], circles[i][1]), circles[i][2], (0, 100, 100), 3)
     
-    cv2.imshow("circles", circles_img)
-    cv2.waitKey(0)
-
-    # linesP = cv2.HoughLinesP(255 - bil, 2, np.pi / 180, 10, None, 50, 10)
-
-    # if linesP is not None:
-    #     for i in range(0, len(linesP)):
-    #         l = linesP[i][0]
-    #         cv2.line(img, (l[0], l[1]), (l[2], l[3]), 255, 1, cv2.LINE_AA)
-
-    # cv2.imshow("Detected Lines (in red) - Probabilistic Line Transform", img)
-    # cv2.waitKey(0)
-
-    cv2.destroyAllWindows() 
 
 
 dir_str = "component_dataset"

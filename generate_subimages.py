@@ -77,7 +77,7 @@ def getNeighbors(circle, circles):
     this_x = circle[0]
     this_y = circle[1]
     this_r = circle[2]
-    dist_differential = 50
+    dist_differential = 40
     for other_circle in circles:
         if circle == other_circle:
             continue

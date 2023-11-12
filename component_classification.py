@@ -1,6 +1,7 @@
 import cv2
 import re
 import sys
+import numpy as np
 
 from parse_dataset import get_dataset
 
@@ -48,8 +49,31 @@ def get_component_classifications(orb, bil_params, t_lower, t_upper, img, datase
     if circles is not None:
         toCompare = set(["voltage_source", "current_source", "lightbulb"])
         print("Circle in component detected!")
-    else: 
-        toCompare = set(["wire", "resistor", "diode", "switch"])
+    else:
+        linesP = cv2.HoughLinesP(255 - bil, 2, np.pi / 180, 50, None, 50, 10)
+        isWire = True
+        lowX = bil.shape[1]
+        highX = 0
+        lowY = bil.shape[0]
+        highY = 0
+        if linesP is not None:
+            for i in range(len(linesP)):
+                l = linesP[i][0]
+                lowX = min(lowX, l[0])
+                lowX = min(lowX, l[2])
+                lowY = min(lowY, l[1])
+                lowY = min(lowY, l[3])
+                highX = max(highX, l[0])
+                highX = max(highX, l[2])
+                highY = max(highY, l[1])
+                highY = max(highY, l[3])
+            # if is vertical image and difference in Xs is a lot OR is horizontal image and difference in Ys is a lot
+            if (bil.shape[0] > bil.shape[1] and highX - lowX > bil.shape[1] // 3)  or (bil.shape[1] > bil.shape[0] and highY - lowY > bil.shape[0] // 3):
+                toCompare = set(["resistor", "diode", "switch"])
+            else:
+                toCompare = set(["wire"])
+        else:
+            toCompare = set(["wire", "resistor", "diode", "switch"])
 
     # Now detect the keypoints and compute the descriptors for the query image and train image
     input_keypoints, input_descriptors = orb.detectAndCompute(input_edge,None)
@@ -64,6 +88,23 @@ def get_component_classifications(orb, bil_params, t_lower, t_upper, img, datase
     for filename, edge_img, keypoints, descriptors in dataset:
         if filename not in toCompare:
             continue
+
+        # matches = matcher.knnMatch(input_descriptors, descriptors,k=2)
+        # # Apply ratio test
+        # good = []
+        # good1 = []
+        # for m,n in matches:
+        #     if m.distance < 0.7*n.distance:
+        #         good.append(m)
+        #         good1.append([m])
+        # num_matches = len(good)
+        # if num_matches == 0:
+        #     continue
+        # avg_dist = 0
+        # for i in range(len(good)):
+        #     avg_dist += good[i].distance
+        # avg_dist //= len(good)
+
         matches = matcher.match(input_descriptors, descriptors)
         # matches = sorted(matches, key = lambda x : x.distance)
         num_matches = len(matches)
@@ -72,13 +113,15 @@ def get_component_classifications(orb, bil_params, t_lower, t_upper, img, datase
             avg_dist += matches[i].distance
         avg_dist //= len(matches)
 
-        final_img = cv2.drawMatches(input_edge, input_keypoints,
-        edge_img, keypoints, matches[:20], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+        # final_img = cv2.drawMatches(input_edge, input_keypoints,
+        # edge_img, keypoints, matches[:20], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
 
+        # img3 = cv2.drawMatchesKnn(input_edge,input_keypoints,edge_img,keypoints,good1,None,flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+        # cv2.imshow(f"Matches for {filename}", img3)
+        # cv2.waitKey(0)
         # Show matches
         # cv2.imshow(f"Matches for {filename}", final_img)
         # cv2.waitKey(0)
-        
         dataset_matches.append((filename, num_matches, avg_dist))
         
     dataset_matches.sort(key = lambda x: x[2])
