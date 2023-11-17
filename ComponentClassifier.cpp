@@ -17,13 +17,13 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
     cv::medianBlur(bil, bil, 3);
 
     // Non-Local Means Denoising
-    cv::fastNlMeansDenoising(bil, bil, 30, 11, 21);
+    cv::fastNlMeansDenoising(bil, bil, 30, 11, 41);
 
     // Adaptive Thresholding
-    cv::adaptiveThreshold(bil, bil, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 191, 5);
+    cv::adaptiveThreshold(bil, bil, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 199, 5);
 
     // Median Blur Again
-    cv::medianBlur(bil, bil, 3);
+    cv::medianBlur(bil, bil, 5);
 
     // cv::imshow("Preprocessed", bil);
     // cv::waitKey(0);
@@ -39,7 +39,7 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
 
     cv::Mat circles;
     cv::HoughCircles(edgeImage, circles, cv::HOUGH_GRADIENT, 1, std::max(rows, cols),
-                     300, 30, (std::min(rows, cols) / 5), (std::min(rows, cols) / 2));
+                     300, 40, (std::min(rows, cols) / 6), (std::min(rows, cols) / 2));
 
     std::set<std::string> toCompare;
     // if is a component with a circle
@@ -69,7 +69,13 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
                 (cols > rows && highY - lowY > rows / 3)) {
                 toCompare = {"resistor", "diode", "switch"};
             } else {
-                toCompare = {"wire"};
+                // is a wire
+                ComponentMatch match;
+                match.name = "wire";
+                match.avgDist = 1;
+                match.numMatches = 1;
+                std::vector<ComponentMatch> matches{match};
+                return matches;
             }
         // if couldn't detect any lines, any of these components are fair game for comparisons
         } else {
