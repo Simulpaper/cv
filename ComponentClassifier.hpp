@@ -7,7 +7,7 @@
 
 class ComponentClassifier {
 public:
-    std::vector<ComponentMatch> getClassifications(cv::Ptr<cv::ORB> orb, const cv::Vec3i& bilParams, int tLower, int tUpper, cv::Mat img, const std::vector<DatasetComponent>& dataset);
+    std::vector<ComponentMatch> getClassifications(cv::Ptr<cv::ORB> orb, int tLower, int tUpper, cv::Mat img, const std::vector<DatasetComponent>& dataset);
 };
 
 #endif

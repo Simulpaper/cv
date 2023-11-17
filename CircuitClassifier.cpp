@@ -68,11 +68,14 @@ std::vector<std::vector<Component>> CircuitClassifier::getCircuits(std::string i
     std::vector<ComponentSubimage> subimages = siGen.generateSubimages(imageName);
 
     cv::Ptr<cv::ORB> orb = cv::ORB::create();
-    cv::Vec3i bilParams(5, 25, 25);
     int tLower = 100;
     int tUpper = 300;
 
-    std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, bilParams, tLower, tUpper);
+    std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, tLower, tUpper);
+    if (dataset.size() == 0) {
+        std::cout << "ERROR: dataset is not found/corrupted!" << std::endl;
+        exit(EXIT_FAILURE);
+    }
 
     std::vector<ClassifiedEdge> classifiedEdges;
 
@@ -81,7 +84,7 @@ std::vector<std::vector<Component>> CircuitClassifier::getCircuits(std::string i
         // make the nodes just a pair of x, y coords instead of a Vec3i of x, y, r
         edge.firstNode = std::pair<int, int>(subimage.node1[0], subimage.node1[1]);
         edge.secondNode = std::pair<int, int>(subimage.node2[0], subimage.node2[1]);
-        edge.classifications = compClassifier.getClassifications(orb, bilParams, tLower, tUpper, subimage.image, dataset);
+        edge.classifications = compClassifier.getClassifications(orb, tLower, tUpper, subimage.image, dataset);
 
         classifiedEdges.push_back(edge);
     }

@@ -7,7 +7,8 @@
 
 class DatasetParser {
 public:
-    std::vector<DatasetComponent> getDataset(cv::Ptr<cv::ORB> orb, const cv::Vec3i& bilParams, int tLower, int tUpper);
+    std::vector<DatasetComponent> getDataset(cv::Ptr<cv::ORB> orb, int tLower, int tUpper);
+    std::vector<DatasetComponent> getDatasetFromFile(std::string filename);
 };
 
 #endif

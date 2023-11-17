@@ -10,7 +10,7 @@
 
 namespace fs = std::filesystem;
 
-std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::ORB> orb, const cv::Vec3i& bilParams, int tLower, int tUpper, cv::Mat img, const std::vector<DatasetComponent>& dataset) {
+std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::ORB> orb, int tLower, int tUpper, cv::Mat img, const std::vector<DatasetComponent>& dataset) {
     cv::Mat bil = img;
     
     // Median Blur
@@ -44,7 +44,7 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
     std::set<std::string> toCompare;
     // if is a component with a circle
     if (!circles.empty()) {
-        toCompare = {"voltage_source", "current_source", "lightbulb"};
+        toCompare = {"voltagesourceu", "voltagesourced", "currentsourceu", "currentsourced", "lightbulb"};
         std::cout << "Circle in component detected!" << std::endl;
     // is a component with no circle
     } else {
@@ -137,13 +137,12 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
 //     ComponentClassifier compClassifier;
 
 //     cv::Ptr<cv::ORB> orb = cv::ORB::create();
-//     cv::Vec3i bilParams(5, 25, 25);
 //     int tLower = 150;
 //     int tUpper = 500;
 
-//     std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, bilParams, tLower, tUpper);
+//     std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, tLower, tUpper);
 //     cv::Mat img = cv::imread("../generated_components/component3.jpg");
-//     std::vector<ComponentMatch> topThreeMatches = compClassifier.getClassifications(orb, bilParams, tLower, tUpper, img, dataset);
+//     std::vector<ComponentMatch> topThreeMatches = compClassifier.getClassifications(orb, tLower, tUpper, img, dataset);
 
 //     return 0;
 // }

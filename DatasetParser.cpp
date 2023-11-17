@@ -9,12 +9,9 @@
 
 namespace fs = std::filesystem;
 
-std::vector<DatasetComponent> DatasetParser::getDataset(cv::Ptr<cv::ORB> orb, const cv::Vec3i& bilParams, int tLower, int tUpper) {
+std::vector<DatasetComponent> DatasetParser::getDataset(cv::Ptr<cv::ORB> orb, int tLower, int tUpper) {
     const std::filesystem::path datasetDir{"../component_dataset"};
     std::vector<DatasetComponent> dataset;
-    int datasetSize = 0;
-    int datasetBytes = 0;
-    int numDescriptors = 0;
     
     for (const auto& entry : fs::directory_iterator{datasetDir}) {
         if (!entry.is_regular_file()) {
@@ -52,10 +49,41 @@ std::vector<DatasetComponent> DatasetParser::getDataset(cv::Ptr<cv::ORB> orb, co
         dsComponent.keypoints = keypoints;
         dsComponent.descriptors = descriptors;
         dataset.push_back(dsComponent);
-        datasetSize++;
-        datasetBytes += descriptors.total() * descriptors.elemSize();
-        numDescriptors += descriptors.rows;
     }
+
+    return dataset;
+}
+
+std::vector<DatasetComponent> DatasetParser::getDatasetFromFile(std::string filename) {
+    std::vector<DatasetComponent> dataset;
+
+    cv::FileStorage file(filename, cv::FileStorage::READ);
+
+    if (!file.isOpened()) {
+        std::cerr << "Dataset file not found/corrupted!" << std::endl;
+        return std::vector<DatasetComponent>();
+    }
+
+    cv::FileNodeIterator it = file.root().begin();
+    cv::FileNodeIterator it_end = file.root().end();
+
+    for (; it != it_end; ++it) {
+        std::string key = *it;  // Get the key
+        cv::Mat descriptors;
+
+        // Read the matrix from the file using the key
+        file[key] >> descriptors;
+
+
+        DatasetComponent dsComponent;
+        dsComponent.name = key.substr(0, key.find_first_of("0123456789"));
+        // dsComponent.image = datasetEdge;
+        // dsComponent.keypoints = keypoints;
+        dsComponent.descriptors = descriptors;
+        dataset.push_back(dsComponent);
+    }
+
+    file.release(); // Release the file
 
     return dataset;
 }
@@ -64,11 +92,10 @@ std::vector<DatasetComponent> DatasetParser::getDataset(cv::Ptr<cv::ORB> orb, co
 //     DatasetParser dsParser;
 
 //     cv::Ptr<cv::ORB> orb = cv::ORB::create();
-//     cv::Vec3i bilParams(5, 25, 25);
 //     int tLower = 150;
 //     int tUpper = 500;
 
-//     std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, bilParams, tLower, tUpper);
+//     std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, tLower, tUpper);
 
 //     // Print the results or process the dataset as needed
 //     for (const auto& item : dataset) {
