@@ -283,4 +283,4 @@ def get_edges_subimages(filename):
     return sub_images
 
 if __name__ == "__main__":
-    get_edges_subimages("component_images/bad_demo.jpg")
+    get_edges_subimages("../component_images/bad_demo.jpg")

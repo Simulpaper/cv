@@ -79,7 +79,7 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset):
             if (bil.shape[0] > bil.shape[1] and highX - lowX > bil.shape[1] // 3)  or (bil.shape[1] > bil.shape[0] and highY - lowY > bil.shape[0] // 3):
                 toCompare = set(["resistor", "diode", "switch"])
             else:
-                toCompare = set(["wire"])
+                return [("wire", 1, 1)]
         else:
             toCompare = set(["wire", "resistor", "diode", "switch"])
 
@@ -157,7 +157,7 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset):
 
 
 if __name__ == "__main__":
-    img = cv2.imread(f"generated_components/component2.jpg", cv2.IMREAD_GRAYSCALE) # Read image
+    img = cv2.imread(f"../generated_components/component2.jpg", cv2.IMREAD_GRAYSCALE) # Read image
     # Setting parameter values for Canny
     t_lower = 200 # Lower Threshold
     t_upper = 400 # Upper threshold

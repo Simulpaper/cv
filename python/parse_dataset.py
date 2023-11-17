@@ -6,7 +6,7 @@ import numpy as np
 import random as rng
 
 def get_dataset(orb, t_lower, t_upper):
-    dataset_dir = "component_dataset"
+    dataset_dir = "../component_dataset"
     dataset = []
     dataset_size = 0
     dataset_bytes = 0

@@ -31,7 +31,7 @@ def generate_circuits(new_edges):
 
 if __name__ == "__main__":
     # list of [circle1, circle2, subimages]
-    edge_subimages = get_edges_subimages("component_images/shadows.jpg")
+    edge_subimages = get_edges_subimages("../component_images/shadows.jpg")
 
     # Setting parameter values for Canny
     t_lower = 100 # Lower Threshold

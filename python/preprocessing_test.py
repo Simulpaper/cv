@@ -85,7 +85,7 @@ def process_image(img):
     
 
 
-dir_str = "component_dataset"
+dir_str = "../component_dataset"
 
 
 for filename in os.listdir(dir_str):
