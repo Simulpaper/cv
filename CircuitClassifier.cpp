@@ -35,8 +35,13 @@ std::vector<CircuitClassification> generateCircuits(const std::vector<Classified
         for (size_t i = 0; i < numComponents; ++i) {
             ComponentMatch cMatch = *it[i];
             Component c;
-            c.firstNode = edges[i].firstNode;
-            c.secondNode = edges[i].secondNode;
+            if (!cMatch.posOrientation) {
+                c.firstNode = edges[i].secondNode;
+                c.secondNode = edges[i].firstNode;
+            } else {
+                c.firstNode = edges[i].firstNode;
+                c.secondNode = edges[i].secondNode;
+            }
             c.type = cMatch.name;
             score += cMatch.avgDist;
             newEdges.push_back(c);
@@ -71,7 +76,7 @@ std::vector<std::vector<Component>> CircuitClassifier::getCircuits(std::string i
     int tLower = 100;
     int tUpper = 300;
 
-    std::vector<DatasetComponent> dataset = dsParser.getDataset(orb, tLower, tUpper);
+    std::vector<DatasetComponent> dataset = dsParser.getDatasetFromFile("../dataset.yml");
     if (dataset.size() == 0) {
         std::cout << "ERROR: dataset is not found/corrupted!" << std::endl;
         exit(EXIT_FAILURE);

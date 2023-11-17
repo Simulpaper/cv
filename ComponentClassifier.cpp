@@ -44,7 +44,7 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
     std::set<std::string> toCompare;
     // if is a component with a circle
     if (!circles.empty()) {
-        toCompare = {"voltagesourceu", "voltagesourced", "currentsourceu", "currentsourced", "lightbulb"};
+        toCompare = {"voltagesource", "currentsource", "lightbulb"};
         std::cout << "Circle in component detected!" << std::endl;
     // is a component with no circle
     } else {
@@ -77,9 +77,14 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
                 std::vector<ComponentMatch> matches{match};
                 return matches;
             }
-        // if couldn't detect any lines, any of these components are fair game for comparisons
+        // if couldn't detect any lines, assume wire
         } else {
-            toCompare = {"wire", "resistor", "diode", "switch"};
+            ComponentMatch match;
+            match.name = "wire";
+            match.avgDist = 1;
+            match.numMatches = 1;
+            std::vector<ComponentMatch> matches{match};
+            return matches;
         }
     }
 
@@ -108,6 +113,7 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
         avgDist /= matches.size();
         ComponentMatch m;
         m.name = item.name;
+        m.posOrientation = item.posOrientation;
         m.avgDist = avgDist;
         m.numMatches = matches.size();
         datasetMatches.push_back(m);

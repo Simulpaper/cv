@@ -12,6 +12,10 @@ namespace fs = std::filesystem;
 std::vector<DatasetComponent> DatasetParser::getDataset(cv::Ptr<cv::ORB> orb, int tLower, int tUpper) {
     const std::filesystem::path datasetDir{"../component_dataset"};
     std::vector<DatasetComponent> dataset;
+
+    std::set<std::string> positiveOrientation = {"voltagesourceu", "currentsourceu", "diodeu"};
+    std::set<std::string> negativeOrientation = {"voltagesourced", "currentsourced", "dioded"};
+
     
     for (const auto& entry : fs::directory_iterator{datasetDir}) {
         if (!entry.is_regular_file()) {
@@ -44,7 +48,17 @@ std::vector<DatasetComponent> DatasetParser::getDataset(cv::Ptr<cv::ORB> orb, in
         cv::Mat descriptors;
         orb->detectAndCompute(datasetEdge, cv::noArray(), keypoints, descriptors);
         DatasetComponent dsComponent;
-        dsComponent.name = entry.path().stem().string().substr(0, entry.path().stem().string().find_first_of("0123456789"));
+        std::string componentName = entry.path().stem().string().substr(0, entry.path().stem().string().find_first_of("0123456789"));
+        if (positiveOrientation.count(componentName) != 0) {
+            dsComponent.name = componentName.substr(0, componentName.size() - 1);
+            dsComponent.posOrientation = true;
+        } else if (negativeOrientation.count(componentName) != 0) {
+            dsComponent.name = componentName.substr(0, componentName.size() - 1);
+            dsComponent.posOrientation = false;
+        } else {
+            dsComponent.name = componentName;
+            dsComponent.posOrientation = true;
+        }
         dsComponent.image = datasetEdge;
         dsComponent.keypoints = keypoints;
         dsComponent.descriptors = descriptors;
@@ -59,6 +73,9 @@ std::vector<DatasetComponent> DatasetParser::getDatasetFromFile(std::string file
 
     cv::FileStorage file(filename, cv::FileStorage::READ);
 
+    std::set<std::string> positiveOrientation = {"voltagesourceu", "currentsourceu", "diodeu"};
+    std::set<std::string> negativeOrientation = {"voltagesourced", "currentsourced", "dioded"};
+
     if (!file.isOpened()) {
         std::cerr << "Dataset file not found/corrupted!" << std::endl;
         return std::vector<DatasetComponent>();
@@ -68,17 +85,29 @@ std::vector<DatasetComponent> DatasetParser::getDatasetFromFile(std::string file
     cv::FileNodeIterator it_end = file.root().end();
 
     for (; it != it_end; ++it) {
-        std::string key = *it;  // Get the key
+        cv::FileNode item = *it;
+        std::string key = item.name();
+        // std::string key = *it;  // Get the key
         cv::Mat descriptors;
 
         // Read the matrix from the file using the key
         file[key] >> descriptors;
 
-
+        std::cout << key << std::endl;
         DatasetComponent dsComponent;
-        dsComponent.name = key.substr(0, key.find_first_of("0123456789"));
-        // dsComponent.image = datasetEdge;
-        // dsComponent.keypoints = keypoints;
+        std::string componentName = key.substr(0, key.find_first_of("0123456789"));
+        std::cout << componentName << std::endl;
+        if (positiveOrientation.count(componentName) != 0) {
+            dsComponent.name = componentName.substr(0, componentName.size() - 1);
+            dsComponent.posOrientation = true;
+        } else if (negativeOrientation.count(componentName) != 0) {
+            dsComponent.name = componentName.substr(0, componentName.size() - 1);
+            dsComponent.posOrientation = false;
+        } else {
+            dsComponent.name = componentName;
+            dsComponent.posOrientation = true;
+        }
+        std::cout << dsComponent.name << std::endl;
         dsComponent.descriptors = descriptors;
         dataset.push_back(dsComponent);
     }
