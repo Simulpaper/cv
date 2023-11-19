@@ -75,6 +75,7 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
                 match.avgDist = 1;
                 match.numMatches = 1;
                 std::vector<ComponentMatch> matches{match};
+                std::cout << "Component match: " << match.name  << " with num matches: " << match.numMatches << " and avg dist: " << match.avgDist << std::endl << std::endl;
                 return matches;
             }
         // if couldn't detect any lines, assume wire
@@ -84,6 +85,7 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
             match.avgDist = 1;
             match.numMatches = 1;
             std::vector<ComponentMatch> matches{match};
+            std::cout << "Component match: " << match.name  << " with num matches: " << match.numMatches << " and avg dist: " << match.avgDist << std::endl << std::endl;
             return matches;
         }
     }
@@ -130,10 +132,10 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
             std::cout << "Component match: " << match.name  << " with num matches: " << match.numMatches << " and avg dist: " << match.avgDist << std::endl;
         }
         if (haveComponents.size() == 3) {
-            std::cout << std::endl;
             break;
         }
     }
+    std::cout << std::endl;
     
     return topThreeMatches;
 }

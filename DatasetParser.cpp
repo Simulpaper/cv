@@ -15,7 +15,6 @@ std::vector<DatasetComponent> DatasetParser::getDataset(cv::Ptr<cv::ORB> orb, in
 
     std::set<std::string> positiveOrientation = {"voltagesourceu", "currentsourceu", "diodeu"};
     std::set<std::string> negativeOrientation = {"voltagesourced", "currentsourced", "dioded"};
-
     
     for (const auto& entry : fs::directory_iterator{datasetDir}) {
         if (!entry.is_regular_file()) {
@@ -87,16 +86,13 @@ std::vector<DatasetComponent> DatasetParser::getDatasetFromFile(std::string file
     for (; it != it_end; ++it) {
         cv::FileNode item = *it;
         std::string key = item.name();
-        // std::string key = *it;  // Get the key
         cv::Mat descriptors;
 
         // Read the matrix from the file using the key
         file[key] >> descriptors;
 
-        std::cout << key << std::endl;
         DatasetComponent dsComponent;
         std::string componentName = key.substr(0, key.find_first_of("0123456789"));
-        std::cout << componentName << std::endl;
         if (positiveOrientation.count(componentName) != 0) {
             dsComponent.name = componentName.substr(0, componentName.size() - 1);
             dsComponent.posOrientation = true;
@@ -107,7 +103,6 @@ std::vector<DatasetComponent> DatasetParser::getDatasetFromFile(std::string file
             dsComponent.name = componentName;
             dsComponent.posOrientation = true;
         }
-        std::cout << dsComponent.name << std::endl;
         dsComponent.descriptors = descriptors;
         dataset.push_back(dsComponent);
     }

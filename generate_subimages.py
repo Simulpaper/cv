@@ -278,9 +278,9 @@ def get_edges_subimages(filename):
     for i in range(len(sub_images)):
         cv2.imshow(f"component{i}", sub_images[i][2])
         cv2.waitKey(0)
-        # cv2.imwrite(f"generated_components/component{i}.jpg", sub_images[i][2])
+        cv2.imwrite(f"../generated_components/component{i}.jpg", sub_images[i][2])
     cv2.destroyAllWindows()
     return sub_images
 
 if __name__ == "__main__":
-    get_edges_subimages("component_images/bad_demo.jpg")
+    get_edges_subimages("component_images/switches.jpg")

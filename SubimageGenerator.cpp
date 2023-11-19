@@ -21,12 +21,12 @@ cv::Mat loadImage(const std::string& filename) {
     return img;
 }
 
-cv::Mat applyThreshold(const cv::Mat& img, double thresholdValue) {
+cv::Mat applyThreshold(const cv::Mat& img) {
     cv::Mat binaryImg = img.clone();
-    cv::threshold(binaryImg, binaryImg, thresholdValue, 255, cv::THRESH_BINARY);
-    // cv::imshow("Thresholded img", binaryImg);
-    // cv::waitKey(0);
-    return binaryImg;
+    cv::fastNlMeansDenoising(binaryImg, binaryImg, 30, 21, 11);
+    cv::adaptiveThreshold(binaryImg, binaryImg, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 49, 5);
+
+    return binaryImg; 
 }
 
 cv::Mat applyMedianBlur(const cv::Mat& img, int ksize) {
@@ -194,7 +194,8 @@ std::vector<ComponentSubimage> getSubimages(const cv::Mat& userImg, const std::v
     int extraWidth = 20;
 
     cv::Mat thresholdImg = userImg.clone();
-    cv::threshold(userImg, thresholdImg, 100, 255, cv::THRESH_BINARY);
+    cv::fastNlMeansDenoising(thresholdImg, thresholdImg, 50, 11, 11);
+    cv::adaptiveThreshold(thresholdImg, thresholdImg, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 27, 5);
 
     for (const auto& edge : edges) {
         const cv::Vec3i& circle1 = edge.first;

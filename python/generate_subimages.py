@@ -14,12 +14,15 @@ def load_image(filename):
     cv2.waitKey(0)
     return img
 
-def apply_threshold(img, threshold_value=80):
+def apply_threshold(img):
     binary_img = img.copy()
-    # binary_img = cv2.adaptiveThreshold(binary_img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-    #                                       cv2.THRESH_BINARY, 199, 5) 
-    binary_img = cv2.threshold(binary_img, threshold_value, 255, cv2.THRESH_BINARY)[1]
-    cv2.imshow("binary img", binary_img)
+
+    binary_img = cv2.fastNlMeansDenoising(binary_img, None, 30, 21, 11)
+    cv2.imshow(f"bin image", binary_img)
+    cv2.waitKey(0)
+    binary_img = cv2.adaptiveThreshold(binary_img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+                                          cv2.THRESH_BINARY, 49, 5) 
+    cv2.imshow(f"bin image", binary_img)
     cv2.waitKey(0)
     return binary_img
 
@@ -152,7 +155,14 @@ def get_subimages(img, edges):
 
     cut_off = 50
     binary_img = img.copy()
-    binary_img = cv2.threshold(binary_img, 100, 255, cv2.THRESH_BINARY)[1]
+
+    binary_img = cv2.fastNlMeansDenoising(binary_img, None, 50, 11, 11)
+    cv2.imshow(f"bin image", binary_img)
+    cv2.waitKey(0)
+    binary_img = cv2.adaptiveThreshold(binary_img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+                                          cv2.THRESH_BINARY, 27, 5) 
+    cv2.imshow(f"bin image", binary_img)
+    cv2.waitKey(0)
 
     for circle1, circle2 in edges:
         isHorizontal = abs(circle1[0] - circle2[0]) > abs(circle1[1] - circle2[1])
@@ -273,14 +283,23 @@ def get_edges_subimages(filename):
                     edges.add((circle, neighbor))
     print(edges)
 
+    cv2.destroyAllWindows()
+
     sub_images = get_subimages(user_img, edges)
 
     for i in range(len(sub_images)):
         cv2.imshow(f"component{i}", sub_images[i][2])
         cv2.waitKey(0)
-        cv2.imwrite(f"../generated_components/component{i}.jpg", sub_images[i][2])
+        name = filename[filename.rfind('/')+ 1: filename.rfind('.')]
+        cv2.imwrite(f"../generated_components/{name}{random.randrange(0, 100000)}.jpg", sub_images[i][2])
     cv2.destroyAllWindows()
     return sub_images
 
+import random
+
 if __name__ == "__main__":
-    get_edges_subimages("../component_images/circuit4.jpg")
+
+    for filename in os.listdir("../component_images"):
+        get_edges_subimages(f"../component_images/{filename}")
+
+    # get_edges_subimages(f"../component_images/resistors.jpg")
