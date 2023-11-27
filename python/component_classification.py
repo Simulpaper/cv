@@ -1,7 +1,9 @@
 import cv2
 import re
 import sys
+import os
 import numpy as np
+
 
 from parse_dataset import get_dataset
 
@@ -9,37 +11,29 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset):
     
     bil = img.copy()
     bil = cv2.medianBlur(bil, 3)
-    cv2.imshow('median blurred', bil) 
-    cv2.waitKey(0)
+    # cv2.imshow('median blurred', bil) 
+    # cv2.waitKey(0)
 
-    bil = cv2.fastNlMeansDenoising(bil, None, 30, 11, 41)
-    cv2.imshow('denoise', bil) 
-    cv2.waitKey(0)
-
-
-    bil = cv2.adaptiveThreshold(bil, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-                                        cv2.THRESH_BINARY, 199, 5) 
-    cv2.imshow('adapt thresh', bil) 
-    cv2.waitKey(0)
-
-    bil = cv2.medianBlur(bil, 5)
-    cv2.imshow('med blurr again', bil) 
-    cv2.waitKey(0)
-
-    # bil = cv2.fastNlMeansDenoising(bil, None, 30, 11, 21)
+    bil = cv2.fastNlMeansDenoising(bil, None, 30, 7, 11)
     # cv2.imshow('denoise', bil) 
     # cv2.waitKey(0)
 
-    # bil = cv2.medianBlur(bil, 3)
+
+    bil = cv2.adaptiveThreshold(bil, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+                                        cv2.THRESH_BINARY, 31, 5) 
+    # cv2.imshow('adapt thresh', bil) 
+    # cv2.waitKey(0)
+
+    bil = cv2.medianBlur(bil, 5)
     # cv2.imshow('med blurr again', bil) 
     # cv2.waitKey(0)
 
     # Applying the Canny Edge filter
     input_edge = cv2.Canny(bil, t_lower, t_upper)
 
-    cv2.imshow(f"Canny edged", input_edge)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow(f"Canny edged", input_edge)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     rows = img.shape[0]
     cols = img.shape[1]
@@ -85,6 +79,7 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset):
 
     # Now detect the keypoints and compute the descriptors for the query image and train image
     input_keypoints, input_descriptors = orb.detectAndCompute(input_edge,None)
+
     # print(f"Input image descriptors len: {len(input_descriptors)}, size in bytes: {sys.getsizeof(input_descriptors)}")
 
     # Initialize the Matcher for matching the keypoints and then match the keypoints
@@ -95,54 +90,20 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset):
         if filename not in toCompare:
             continue
 
-        # matches = matcher.knnMatch(input_descriptors, descriptors,k=2)
-        # # Apply ratio test
-        # good = []
-        # good1 = []
-        # for m,n in matches:
-        #     if m.distance < 0.7*n.distance:
-        #         good.append(m)
-        #         good1.append([m])
-        # num_matches = len(good)
-        # if num_matches == 0:
-        #     continue
-        # avg_dist = 0
-        # for i in range(len(good)):
-        #     avg_dist += good[i].distance
-        # avg_dist //= len(good)
-
         matches = matcher.match(input_descriptors, descriptors)
         # matches = sorted(matches, key = lambda x : x.distance)
         num_matches = len(matches)
         avg_dist = 0
-        for i in range(len(matches)):
+        for i in range(num_matches):
             avg_dist += matches[i].distance
-        avg_dist //= len(matches)
+        avg_dist //= num_matches
 
         dataset_matches.append((filename, num_matches, avg_dist))
         
-    dataset_matches.sort(key = lambda x: x[2])
-    # print(dataset_matches)
 
     if dataset_matches[0][2] >= 50:
         dataset_matches = []
         for filename, edge_img, keypoints, descriptors in dataset:
-
-            # matches = matcher.knnMatch(input_descriptors, descriptors,k=2)
-            # # Apply ratio test
-            # good = []
-            # good1 = []
-            # for m,n in matches:
-            #     if m.distance < 0.7*n.distance:
-            #         good.append(m)
-            #         good1.append([m])
-            # num_matches = len(good)
-            # if num_matches == 0:
-            #     continue
-            # avg_dist = 0
-            # for i in range(len(good)):
-            #     avg_dist += good[i].distance
-            # avg_dist //= len(good)
 
             matches = matcher.match(input_descriptors, descriptors)
             # matches = sorted(matches, key = lambda x : x.distance)
@@ -178,10 +139,32 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset):
 
 
 if __name__ == "__main__":
-    img = cv2.imread(f"../generated_components/component2.jpg", cv2.IMREAD_GRAYSCALE) # Read image
     # Setting parameter values for Canny
     t_lower = 200 # Lower Threshold
     t_upper = 400 # Upper threshold
     orb = cv2.ORB_create()
     dataset = get_dataset(orb, t_lower, t_upper)
-    classifications = get_component_classifications(orb, t_lower, t_upper, img, dataset)
+
+    total = 0
+    correct = 0
+    correct_orientation = 0
+    total_orientation = 0
+    with_orientation = set(["voltagesourceu", "voltagesourced", "currentsourceu", "currentsourced", "diodeu", "dioded"])
+    w_orientation = set(["voltagesource", "currentsource", "diode"])
+
+    dir_str = "../generated_components"
+    for filename in os.listdir(dir_str):
+        img = cv2.imread(f"{dir_str}/{filename}", cv2.IMREAD_GRAYSCALE)
+        classifications = get_component_classifications(orb, t_lower, t_upper, img, dataset)
+        correct_component = filename[:re.search(r'\d', filename).start()]
+        if correct_component in with_orientation:
+            if classifications[0][0][:-1] == correct_component[:-1]:
+                correct += 1
+            if classifications[0][0] == correct_component:
+                correct_orientation += 1
+            total_orientation += 1
+        else:
+            if classifications[0][0] == correct_component:
+                correct += 1
+        total += 1
+        print(f"Correct: {correct}; total: {total}; correct orientation: {correct_orientation}; total orientation: {total_orientation}")

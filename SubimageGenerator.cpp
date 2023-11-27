@@ -298,7 +298,7 @@ std::vector<ComponentSubimage> getSubimages(const cv::Mat& userImg, const std::v
 std::vector<ComponentSubimage> SubimageGenerator::generateSubimages(const std::string& filename) {
     cv::Mat userImg = loadImage(filename);
     std::cout << "Loaded image" << std::endl;
-    cv::Mat thresholdedImg = applyThreshold(userImg, 80);
+    cv::Mat thresholdedImg = applyThreshold(userImg);
     std::cout << "Applied threshold" << std::endl;
     cv::Mat medBlurredImg = applyMedianBlur(thresholdedImg, 31);
     std::cout << "Applied median blur" << std::endl;

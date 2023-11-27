@@ -23,24 +23,16 @@ def get_dataset(orb, t_lower, t_upper):
         # cv2.imshow('median blurred', bil) 
         # cv2.waitKey(0)
 
-        bil = cv2.fastNlMeansDenoising(bil, None, 30, 11, 41)
+        bil = cv2.fastNlMeansDenoising(bil, None, 30, 7, 11)
         # cv2.imshow('denoise', bil) 
         # cv2.waitKey(0)
 
         bil = cv2.adaptiveThreshold(bil, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-                                            cv2.THRESH_BINARY, 199, 5) 
+                                            cv2.THRESH_BINARY, 31, 5) 
         # cv2.imshow('adapt thresh', bil) 
         # cv2.waitKey(0)
 
         bil = cv2.medianBlur(bil, 5)
-        # cv2.imshow('med blurr again', bil) 
-        # cv2.waitKey(0)
-
-        # bil = cv2.fastNlMeansDenoising(bil, None, 30, 11, 21)
-        # cv2.imshow('denoise', bil) 
-        # cv2.waitKey(0)
-
-        # bil = cv2.medianBlur(bil, 3)
         # cv2.imshow('med blurr again', bil) 
         # cv2.waitKey(0)
         

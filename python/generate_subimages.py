@@ -227,29 +227,7 @@ def get_subimages(img, edges):
             left_x = max(0, x - 20)
             sub_image = img[lowerY: upperY, left_x:right_x]
             sub_images.append([circle1, circle2, sub_image])
-
-
-    # shave_off = 50
-    # add_size = 90 
-
-    # for circle1, circle2 in edges:
-
-    #     # if component is horizontal
-    #     if abs(circle1[0] - circle2[0]) > abs(circle1[1] - circle2[1]):
-    #         x_min = min(circle1[0], circle2[0]) + shave_off
-    #         x_max = max(circle1[0], circle2[0]) - shave_off
-    #         y_min = max(min(circle1[1], circle2[1]) - add_size, 0)
-    #         y_max = min(max(circle1[1], circle2[1]) + add_size, img.shape[0])
-    #     # else component is vertical
-    #     else:
-    #         x_min = max(min(circle1[0], circle2[0]) - add_size, 0)
-    #         x_max = min(max(circle1[0], circle2[0]) + add_size, img.shape[1])
-    #         y_min = min(circle1[1], circle2[1]) + shave_off
-    #         y_max = max(circle1[1], circle2[1]) - shave_off
-
-    #     sub_image = img[y_min:y_max, x_min:x_max]
-    #     # first node, second node, subimage
-    #     sub_images.append([circle1, circle2, sub_image])
+            
     return sub_images
 
 def get_edges_subimages(filename):
@@ -299,7 +277,7 @@ import random
 
 if __name__ == "__main__":
 
-    for filename in os.listdir("../component_images"):
-        get_edges_subimages(f"../component_images/{filename}")
+    # for filename in os.listdir("../component_images"):
+    #     get_edges_subimages(f"../component_images/{filename}")
 
-    # get_edges_subimages(f"../component_images/resistors.jpg")
+    get_edges_subimages(f"../component_images/random2.jpg")
