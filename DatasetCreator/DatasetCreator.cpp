@@ -1,4 +1,5 @@
 #include <opencv2/opencv.hpp>
+#include <opencv2/xfeatures2d.hpp>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -10,7 +11,7 @@ void DatasetCreator::createDataset(cv::Ptr<cv::ORB> orb, int tLower, int tUpper)
     const std::filesystem::path datasetDir{"../../component_dataset"};
 
     cv::FileStorage file("../../dataset.yml", cv::FileStorage::WRITE);
-    int i = 0;
+
     for (const auto& entry : std::filesystem::directory_iterator{datasetDir}) {
         if (!entry.is_regular_file()) {
             std::cout << "Warning: file " << entry.path() << "not a regular file! Skipping it" << std::endl;
@@ -41,13 +42,13 @@ void DatasetCreator::createDataset(cv::Ptr<cv::ORB> orb, int tLower, int tUpper)
         std::vector<cv::KeyPoint> keypoints;
         cv::Mat descriptors;
         orb->detectAndCompute(datasetEdge, cv::noArray(), keypoints, descriptors);
+        cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor> brief = cv::xfeatures2d::BriefDescriptorExtractor::create();
+        brief->compute(edgeImage, keypoints, descriptors);
 
         std::cout << entry.path().stem().string() << std::endl;
-        i++;
 
         file << entry.path().stem().string() << descriptors;
     }
-    std::cout << i << std::endl;
     file.release();
 }
 

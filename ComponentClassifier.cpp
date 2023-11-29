@@ -1,4 +1,5 @@
 #include <opencv2/opencv.hpp>
+#include <opencv2/xfeatures2d.hpp>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -93,6 +94,10 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
     std::vector<cv::KeyPoint> keypoints;
     cv::Mat descriptors;
     orb->detectAndCompute(edgeImage, cv::noArray(), keypoints, descriptors);
+
+    cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor> brief = cv::xfeatures2d::BriefDescriptorExtractor::create();
+    brief->compute(edgeImage, keypoints, descriptors);
+
 
     cv::BFMatcher matcher(cv::NORM_HAMMING, false);
 

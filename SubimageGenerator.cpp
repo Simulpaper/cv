@@ -87,7 +87,7 @@ std::vector<cv::Vec3i> getNeighbors(const cv::Vec3i& circle, const std::vector<c
     int thisX = circle[0];
     int thisY = circle[1];
     int thisR = circle[2];
-    double distDifferential = 50; // a right triangle of dirDist and 50 pixels as base and height should be the max to be considered a neighbor
+    double distDifferential = 80; // a right triangle of dirDist and 50 pixels as base and height should be the max to be considered a neighbor
     double dirDist;
 
     for (const cv::Vec3i& otherCircle : circles) {
@@ -305,7 +305,7 @@ std::vector<ComponentSubimage> SubimageGenerator::generateSubimages(const std::s
 
     std::vector<cv::Vec3i> circles = getCircles(medBlurredImg);
     std::cout << "got circles: " << circles.size() << std::endl;
-    showCircles(userImg, circles);
+    // showCircles(userImg, circles);
     
     // get neighbors:
     std::map<cv::Vec3i, std::vector<cv::Vec3i>, Vec3iCompare> neighbors;
@@ -318,12 +318,12 @@ std::vector<ComponentSubimage> SubimageGenerator::generateSubimages(const std::s
                 neighborCount += 1;
             }
         }
-        if (neighborCount >= 2) {
+        if (neighborCount >= 0) {
             neighbors[circle] = circle_neighbors;
         }
     }
     
-    showNeighbors(userImg, neighbors);
+    // showNeighbors(userImg, neighbors);
 
     std::vector<std::pair<cv::Vec3i, cv::Vec3i>> edges = getEdges(neighbors);
 
