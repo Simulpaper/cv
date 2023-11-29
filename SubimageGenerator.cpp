@@ -41,7 +41,7 @@ std::vector<cv::Vec3i> getCircles(const cv::Mat& img) {
     int rows = img.rows;
     int cols = img.cols;
     std::vector<cv::Vec3f> fCircles;
-    cv::HoughCircles(img, fCircles, cv::HOUGH_GRADIENT, 1, std::min(rows / 8, cols / 8), 200, 10, 10, 80);
+    cv::HoughCircles(img, fCircles, cv::HOUGH_GRADIENT, 1, std::min(rows / 8, cols / 8), 200, 8, 5, 80);
 
     
     if (fCircles.empty()) {
@@ -302,9 +302,10 @@ std::vector<ComponentSubimage> SubimageGenerator::generateSubimages(const std::s
     std::cout << "Applied threshold" << std::endl;
     cv::Mat medBlurredImg = applyMedianBlur(thresholdedImg, 31);
     std::cout << "Applied median blur" << std::endl;
+
     std::vector<cv::Vec3i> circles = getCircles(medBlurredImg);
-    std::cout << "got circles" << std::endl;
-    // showCircles(userImg, circles);
+    std::cout << "got circles: " << circles.size() << std::endl;
+    showCircles(userImg, circles);
     
     // get neighbors:
     std::map<cv::Vec3i, std::vector<cv::Vec3i>, Vec3iCompare> neighbors;
@@ -322,9 +323,7 @@ std::vector<ComponentSubimage> SubimageGenerator::generateSubimages(const std::s
         }
     }
     
-
-    // showNeighbors(userImg, neighbors);
-
+    showNeighbors(userImg, neighbors);
 
     std::vector<std::pair<cv::Vec3i, cv::Vec3i>> edges = getEdges(neighbors);
 

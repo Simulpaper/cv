@@ -13,8 +13,8 @@ std::vector<DatasetComponent> DatasetParser::getDataset(cv::Ptr<cv::ORB> orb, in
     const std::filesystem::path datasetDir{"../component_dataset"};
     std::vector<DatasetComponent> dataset;
 
-    std::set<std::string> positiveOrientation = {"voltagesourceu", "currentsourceu", "diodeu"};
-    std::set<std::string> negativeOrientation = {"voltagesourced", "currentsourced", "dioded"};
+    std::set<std::string> positiveOrientation = {"voltagesourceu", "currentsourceu", "diodeu", "voltagesourcer", "currentsourcer", "dioder"};
+    std::set<std::string> negativeOrientation = {"voltagesourced", "currentsourced", "dioded", "voltagesourcel", "currentsourcel", "diodel"};
     
     for (const auto& entry : fs::directory_iterator{datasetDir}) {
         if (!entry.is_regular_file()) {
@@ -72,8 +72,8 @@ std::vector<DatasetComponent> DatasetParser::getDatasetFromFile(std::string file
 
     cv::FileStorage file(filename, cv::FileStorage::READ);
 
-    std::set<std::string> positiveOrientation = {"voltagesourceu", "currentsourceu", "diodeu"};
-    std::set<std::string> negativeOrientation = {"voltagesourced", "currentsourced", "dioded"};
+    std::set<std::string> positiveOrientation = {"voltagesourceu", "currentsourceu", "diodeu", "voltagesourcer", "currentsourcer", "dioder"};
+    std::set<std::string> negativeOrientation = {"voltagesourced", "currentsourced", "dioded", "voltagesourcel", "currentsourcel", "diodel"};
 
     if (!file.isOpened()) {
         std::cerr << "Dataset file not found/corrupted!" << std::endl;

@@ -10,7 +10,7 @@ void DatasetCreator::createDataset(cv::Ptr<cv::ORB> orb, int tLower, int tUpper)
     const std::filesystem::path datasetDir{"../../component_dataset"};
 
     cv::FileStorage file("../../dataset.yml", cv::FileStorage::WRITE);
-    
+    int i = 0;
     for (const auto& entry : std::filesystem::directory_iterator{datasetDir}) {
         if (!entry.is_regular_file()) {
             std::cout << "Warning: file " << entry.path() << "not a regular file! Skipping it" << std::endl;
@@ -24,13 +24,13 @@ void DatasetCreator::createDataset(cv::Ptr<cv::ORB> orb, int tLower, int tUpper)
         cv::medianBlur(bil, bil, 3);
 
         // Non-Local Means Denoising
-        cv::fastNlMeansDenoising(bil, bil, 30, 11, 21);
+        cv::fastNlMeansDenoising(bil, bil, 30, 7, 11);
 
         // Adaptive Thresholding
-        cv::adaptiveThreshold(bil, bil, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 191, 5);
+        cv::adaptiveThreshold(bil, bil, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 31, 5);
 
         // Median Blur Again
-        cv::medianBlur(bil, bil, 3);
+        cv::medianBlur(bil, bil, 5);
 
         // cv::imshow("Preprocessed", bil);
         // cv::waitKey(0);
@@ -43,10 +43,11 @@ void DatasetCreator::createDataset(cv::Ptr<cv::ORB> orb, int tLower, int tUpper)
         orb->detectAndCompute(datasetEdge, cv::noArray(), keypoints, descriptors);
 
         std::cout << entry.path().stem().string() << std::endl;
+        i++;
 
         file << entry.path().stem().string() << descriptors;
     }
-
+    std::cout << i << std::endl;
     file.release();
 }
 

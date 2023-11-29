@@ -44,6 +44,7 @@ struct Component {
     std::pair<int, int> firstNode;
     std::pair<int, int> secondNode;
     std::string type;
+    double value;
 };
 
 struct CircuitClassification {

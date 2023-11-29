@@ -268,8 +268,8 @@ def get_edges_subimages(filename):
     for i in range(len(sub_images)):
         cv2.imshow(f"component{i}", sub_images[i][2])
         cv2.waitKey(0)
-        name = filename[filename.rfind('/')+ 1: filename.rfind('.')]
-        cv2.imwrite(f"../generated_components/{name}{random.randrange(0, 100000)}.jpg", sub_images[i][2])
+        # name = filename[filename.rfind('/')+ 1: filename.rfind('.')]
+        # cv2.imwrite(f"../generated_components/{name}{random.randrange(0, 100000)}.jpg", sub_images[i][2])
     cv2.destroyAllWindows()
     return sub_images
 
@@ -280,4 +280,4 @@ if __name__ == "__main__":
     # for filename in os.listdir("../component_images"):
     #     get_edges_subimages(f"../component_images/{filename}")
 
-    get_edges_subimages(f"../component_images/random2.jpg")
+    get_edges_subimages(f"../component_images/ZZZ.jpg")

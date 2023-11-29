@@ -17,10 +17,10 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
     cv::medianBlur(bil, bil, 3);
 
     // Non-Local Means Denoising
-    cv::fastNlMeansDenoising(bil, bil, 30, 11, 41);
+    cv::fastNlMeansDenoising(bil, bil, 30, 7, 11);
 
     // Adaptive Thresholding
-    cv::adaptiveThreshold(bil, bil, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 199, 5);
+    cv::adaptiveThreshold(bil, bil, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 31, 5);
 
     // Median Blur Again
     cv::medianBlur(bil, bil, 5);
@@ -122,6 +122,41 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
     }
 
     std::sort(datasetMatches.begin(), datasetMatches.end(), compareComponentMatches);
+
+    // if no dataset matches or avg distance of most matching component is >= 40, run against all component types
+    if (datasetMatches.empty() || datasetMatches[0].avgDist >= 40) {
+        for (const auto& item : dataset) {
+
+            std::vector<cv::DMatch> matches;
+            matcher.match(descriptors, item.descriptors, matches, cv::Mat());
+            float avgDist = 0;
+            for (const auto& match : matches) {
+                avgDist += match.distance;
+            }
+            if (matches.size() == 0) {
+                std::cout << "NO MATCHES FOUND WITH " << item.name << std::endl;
+                continue;
+            }
+            avgDist /= matches.size();
+            ComponentMatch m;
+            m.name = item.name;
+            m.posOrientation = item.posOrientation;
+            m.avgDist = avgDist;
+            m.numMatches = matches.size();
+            datasetMatches.push_back(m);
+        }
+    }
+
+    std::sort(datasetMatches.begin(), datasetMatches.end(), compareComponentMatches);
+
+    // if still no dataset matches, default wire
+    if (datasetMatches.empty()) {
+        ComponentMatch match;
+        match.name = "wire";
+        match.avgDist = 1;
+        match.numMatches = 1;
+        datasetMatches.push_back(match);
+    }
 
     std::vector<ComponentMatch> topThreeMatches;
     std::set<std::string> haveComponents;
