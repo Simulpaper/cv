@@ -43,7 +43,7 @@ void DatasetCreator::createDataset(cv::Ptr<cv::ORB> orb, int tLower, int tUpper)
         cv::Mat descriptors;
         orb->detectAndCompute(datasetEdge, cv::noArray(), keypoints, descriptors);
         cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor> brief = cv::xfeatures2d::BriefDescriptorExtractor::create();
-        brief->compute(edgeImage, keypoints, descriptors);
+        brief->compute(datasetEdge, keypoints, descriptors);
 
         std::cout << entry.path().stem().string() << std::endl;
 

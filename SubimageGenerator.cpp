@@ -300,7 +300,7 @@ std::vector<ComponentSubimage> SubimageGenerator::generateSubimages(const std::s
     std::cout << "Loaded image" << std::endl;
     cv::Mat thresholdedImg = applyThreshold(userImg);
     std::cout << "Applied threshold" << std::endl;
-    cv::Mat medBlurredImg = applyMedianBlur(thresholdedImg, 31);
+    cv::Mat medBlurredImg = applyMedianBlur(thresholdedImg, 41);
     std::cout << "Applied median blur" << std::endl;
 
     std::vector<cv::Vec3i> circles = getCircles(medBlurredImg);

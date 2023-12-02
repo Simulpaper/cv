@@ -31,26 +31,26 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset, num):
     # Applying the Canny Edge filter
     input_edge = cv2.Canny(bil, t_lower, t_upper)
 
-    # cv2.imshow(f"Canny edged", input_edge)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+    cv2.imshow(f"Canny edged", input_edge)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
     rows = img.shape[0]
     cols = img.shape[1]
     circles = cv2.HoughCircles(input_edge, cv2.HOUGH_GRADIENT, 1, max(rows, cols),
-    param1=300, param2=40,
+    param1=300, param2=30,
     minRadius=(min(rows, cols) // 6), maxRadius=(min(rows, cols)))
     toCompare = set()
     if circles is not None:
         circles = circles.astype(int)
         circles = circles[0]
         toCompare = set(["voltagesourceu", "voltagesourced", "currentsourceu", "currentsourced", "voltagesourcer", "voltagesourcel", "currentsourcer", "currentsourcel", "lightbulb"])
-        # print("Circle in component detected!")
+        print("Circle in component detected!")
         circles_img = input_edge.copy()
         circles_img = cv2.circle(circles_img, (circles[0][0], circles[0][1]), circles[0][2], (255, 0, 255), 3)
-        # cv2.imshow("detected circles", circles_img)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
+        cv2.imshow("detected circles", circles_img)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
     else:
         linesP = cv2.HoughLinesP(255 - bil, 2, np.pi / 180, 50, None, 50, 10)
         isWire = True
@@ -101,7 +101,7 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset, num):
             continue
 
         matches = matcher.match(input_descriptors, descriptors)
-        # matches = sorted(matches, key = lambda x : x.distance)
+        matches = sorted(matches, key = lambda x : x.distance)
 
         num_matches = min(len(matches), num)
         avg_dist = 0
@@ -113,19 +113,19 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset, num):
     
     dataset_matches.sort(key = lambda x: x[2])
 
-    if dataset_matches[0][2] >= 45:
-        dataset_matches = []
-        for filename, edge_img, keypoints, descriptors in dataset:
+    # if dataset_matches[0][2] >= 45:
+    #     dataset_matches = []
+    #     for filename, edge_img, keypoints, descriptors in dataset:
 
-            matches = matcher.match(input_descriptors, descriptors)
-            # matches = sorted(matches, key = lambda x : x.distance)
-            num_matches = min(len(matches), num)
-            avg_dist = 0
-            for i in range(num_matches):
-                avg_dist += matches[i].distance
-            avg_dist //= num_matches
+    #         matches = matcher.match(input_descriptors, descriptors)
+    #         matches = sorted(matches, key = lambda x : x.distance)
+    #         num_matches = min(len(matches), num)
+    #         avg_dist = 0
+    #         for i in range(num_matches):
+    #             avg_dist += matches[i].distance
+    #         avg_dist //= num_matches
 
-            dataset_matches.append((filename, num_matches, avg_dist))
+    #         dataset_matches.append((filename, num_matches, avg_dist))
     
     dataset_matches.sort(key = lambda x: x[2])
 
@@ -167,7 +167,7 @@ if __name__ == "__main__":
     dir_str = "../generated_components"
 
     data = []
-    for n in range(10, 450, 10):
+    for n in range(450, 451, 10):
         total = 0
         correct = 0
         correct_orientation = 0
@@ -191,16 +191,16 @@ if __name__ == "__main__":
         print(f"Num: {n}; Correct: {correct}; total: {total}; correct orientation: {correct_orientation}; total orientation: {total_orientation}")
         print()
 
-    csv_file = 'output.csv'
+    # csv_file = 'output.csv'
 
-    # Open the CSV file in write mode and create a CSV writer
-    with open(csv_file, 'w', newline='') as file:
-        fieldnames = ['n', 'correct', 'correct_o']
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
+    # # Open the CSV file in write mode and create a CSV writer
+    # with open(csv_file, 'w', newline='') as file:
+    #     fieldnames = ['n', 'correct', 'correct_o']
+    #     writer = csv.DictWriter(file, fieldnames=fieldnames)
 
-        # Write the header
-        writer.writeheader()
+    #     # Write the header
+    #     writer.writeheader()
 
-        # Write the data for each iteration
-        for item in data:
-            writer.writerow(item)
+    #     # Write the data for each iteration
+    #     for item in data:
+    #         writer.writerow(item)

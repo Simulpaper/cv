@@ -21,12 +21,10 @@ struct DatasetComponent {
     cv::Mat image;
     std::vector<cv::KeyPoint> keypoints;
     cv::Mat descriptors;
-    bool posOrientation; // true if component has no orientation, or is upwards or rightwards oriented
 };
 
 struct ComponentMatch {
     std::string name;
-    bool posOrientation; // true if component has no orientation, or is upwards or rightwards oriented
     int numMatches;
     float avgDist;
 };

@@ -45,7 +45,7 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
     std::set<std::string> toCompare;
     // if is a component with a circle
     if (!circles.empty()) {
-        toCompare = {"voltagesource", "currentsource", "lightbulb"};
+        toCompare = {"voltagesourceu", "voltagesourced", "voltagesourcel", "voltagesourcer", "currentsourceu", "currentsourced", "currentsourcel", "currentsourcer", "lightbulb"};
         std::cout << "Circle in component detected!" << std::endl;
     // is a component with no circle
     } else {
@@ -68,7 +68,7 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
             // img is vertical && horizontal diff is greater than width/3 OR img is horizontal && vertical diff is greater than height/3
             if ((rows > cols && highX - lowX > cols / 3) ||
                 (cols > rows && highY - lowY > rows / 3)) {
-                toCompare = {"resistor", "diode", "switch"};
+                toCompare = {"resistor", "diodeu", "dioded", "diodel", "dioder", "switch"};
             } else {
                 // is a wire
                 ComponentMatch match;
@@ -120,7 +120,6 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
         avgDist /= matches.size();
         ComponentMatch m;
         m.name = item.name;
-        m.posOrientation = item.posOrientation;
         m.avgDist = avgDist;
         m.numMatches = matches.size();
         datasetMatches.push_back(m);
@@ -129,28 +128,27 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
     std::sort(datasetMatches.begin(), datasetMatches.end(), compareComponentMatches);
 
     // if no dataset matches or avg distance of most matching component is >= 40, run against all component types
-    if (datasetMatches.empty() || datasetMatches[0].avgDist >= 40) {
-        for (const auto& item : dataset) {
+    // if (datasetMatches.empty() || datasetMatches[0].avgDist >= 45) {
+    //     for (const auto& item : dataset) {
 
-            std::vector<cv::DMatch> matches;
-            matcher.match(descriptors, item.descriptors, matches, cv::Mat());
-            float avgDist = 0;
-            for (const auto& match : matches) {
-                avgDist += match.distance;
-            }
-            if (matches.size() == 0) {
-                std::cout << "NO MATCHES FOUND WITH " << item.name << std::endl;
-                continue;
-            }
-            avgDist /= matches.size();
-            ComponentMatch m;
-            m.name = item.name;
-            m.posOrientation = item.posOrientation;
-            m.avgDist = avgDist;
-            m.numMatches = matches.size();
-            datasetMatches.push_back(m);
-        }
-    }
+    //         std::vector<cv::DMatch> matches;
+    //         matcher.match(descriptors, item.descriptors, matches, cv::Mat());
+    //         float avgDist = 0;
+    //         for (const auto& match : matches) {
+    //             avgDist += match.distance;
+    //         }
+    //         if (matches.size() == 0) {
+    //             std::cout << "NO MATCHES FOUND WITH " << item.name << std::endl;
+    //             continue;
+    //         }
+    //         avgDist /= matches.size();
+    //         ComponentMatch m;
+    //         m.name = item.name;
+    //         m.avgDist = avgDist;
+    //         m.numMatches = matches.size();
+    //         datasetMatches.push_back(m);
+    //     }
+    // }
 
     std::sort(datasetMatches.begin(), datasetMatches.end(), compareComponentMatches);
 

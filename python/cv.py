@@ -37,7 +37,7 @@ def generate_circuits(new_edges):
 
 if __name__ == "__main__":
     # list of [circle1, circle2, subimages]
-    edge_subimages = get_edges_subimages("../test_circuits/test5.jpg")
+    edge_subimages = get_edges_subimages("../test_circuits/test7.jpg")
 
     # Setting parameter values for Canny
     t_lower = 100 # Lower Threshold
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     for i in range(len(edge_subimages)):
         subimage = edge_subimages[i][2]
         # classifications = (component type, num matches, avg dist)
-        classifications = get_component_classifications(orb, t_lower, t_upper, subimage, dataset)
+        classifications = get_component_classifications(orb, t_lower, t_upper, subimage, dataset, 10000)
         new_edges.append([edge_subimages[i][0], edge_subimages[i][1], classifications])
     
     possible_circuits = generate_circuits(new_edges)

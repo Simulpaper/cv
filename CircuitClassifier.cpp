@@ -21,6 +21,9 @@ std::vector<CircuitClassification> generateCircuits(const std::vector<Classified
 
     std::vector<std::vector<ComponentMatch>::iterator> it(numComponents); // Vector of iterators
 
+    std::set<std::string> positiveOrientation = {"voltagesourceu", "currentsourceu", "diodeu", "voltagesourcer", "currentsourcer", "dioder"};
+    std::set<std::string> negativeOrientation = {"voltagesourced", "currentsourced", "dioded", "voltagesourcel", "currentsourcel", "diodel"};
+
     // Initialize iterators
     for (int i = 0; i < numComponents; ++i) {
         it[i] = possibleTypes[i].begin();
@@ -35,14 +38,20 @@ std::vector<CircuitClassification> generateCircuits(const std::vector<Classified
         for (size_t i = 0; i < numComponents; ++i) {
             ComponentMatch cMatch = *it[i];
             Component c;
-            if (!cMatch.posOrientation) {
+            std::string name;
+            if (positiveOrientation.count(cMatch.name) != 0  || negativeOrientation.count(cMatch.name) != 0) {
+                name = cMatch.name.substr(0, cMatch.name.length() - 1);
+            } else {
+                name = cMatch.name;
+            }
+            if (negativeOrientation.count(cMatch.name) != 0) {
                 c.firstNode = edges[i].secondNode;
                 c.secondNode = edges[i].firstNode;
             } else {
                 c.firstNode = edges[i].firstNode;
                 c.secondNode = edges[i].secondNode;
             }
-            c.type = cMatch.name;
+            c.type = name;
             score += cMatch.avgDist;
             newEdges.push_back(c);
         }
@@ -106,7 +115,7 @@ std::vector<std::vector<Component>> CircuitClassifier::getCircuits(std::string i
 int main() {
     CircuitClassifier cClassifier;
 
-    std::vector<std::vector<Component>> bestCircuits = cClassifier.getCircuits("../test_circuits/test0.jpg");
+    std::vector<std::vector<Component>> bestCircuits = cClassifier.getCircuits("../test_circuits/test6.jpg");
     for (const auto& circuit : bestCircuits) {
         std::cout << "Circuit edges: [" << std::endl;
         for (const auto& component : circuit) {
