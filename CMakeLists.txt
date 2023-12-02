@@ -6,9 +6,6 @@ add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 find_package(OpenCV REQUIRED)
 
-# set(OpenCV_DIR ./opencv_contrib-4.x/build)
-# set(OpenCV_CONTRIB_MODULES_DIR ${OpenCV_DIR}/modules)
-
 set(SOURCES
     CircuitClassifier.cpp
     ComponentClassifier.cpp

@@ -14,12 +14,15 @@ def generate_circuits(new_edges):
     # print(circuit_combos)
     print(len(circuit_combos))
 
+    pos_orientation = set(["voltagesourceu", "currentsourceu", "diodeu", "voltagesourcer", "currentsourcer", "dioder"])
+    neg_orientation = set(["voltagesourced", "currentsourced", "dioded", "voltagesourcel", "currentsourcel", "diodel"])
+
     possible_circuits = []
     for circuit_combo in circuit_combos:
         circuit = []
         score = 0
         for i, (node1, node2, _) in enumerate(new_edges):
-            if circuit_combo[i][0] == "currentsourced" or circuit_combo[i][0] == "voltagesourced" or circuit_combo[i][0] == "dioded":
+            if circuit_combo[i][0] in neg_orientation:
                 circuit.append([node2, node1, circuit_combo[i][0]])
             else:
                 circuit.append([node1, node2, circuit_combo[i][0]])
@@ -34,7 +37,7 @@ def generate_circuits(new_edges):
 
 if __name__ == "__main__":
     # list of [circle1, circle2, subimages]
-    edge_subimages = get_edges_subimages("../component_images/circuit5.jpg")
+    edge_subimages = get_edges_subimages("../test_circuits/test5.jpg")
 
     # Setting parameter values for Canny
     t_lower = 100 # Lower Threshold

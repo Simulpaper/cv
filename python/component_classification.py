@@ -7,7 +7,7 @@ import numpy as np
 
 from parse_dataset import get_dataset
 
-def get_component_classifications(orb, t_lower, t_upper, img, dataset):
+def get_component_classifications(orb, t_lower, t_upper, img, dataset, num):
     
     bil = img.copy()
     bil = cv2.medianBlur(bil, 3)
@@ -80,8 +80,12 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset):
     # Now detect the keypoints and compute the descriptors for the query image and train image
     input_keypoints, input_descriptors = orb.detectAndCompute(input_edge,None)
     
+    # sift = cv2.SIFT_create()
+    # input_keypoints, input_descriptors = sift.detectAndCompute(input_edge,None)
+
     # fast = cv2.FastFeatureDetector_create()
     # input_keypoints = fast.detect(input_edge, None)
+
     brief = cv2.xfeatures2d.BriefDescriptorExtractor_create()
     input_keypoints, input_descriptors = brief.compute(input_edge, input_keypoints)
     # print(f"Input image descriptors len: {len(input_descriptors)}, size in bytes: {sys.getsizeof(input_descriptors)}")
@@ -98,7 +102,8 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset):
 
         matches = matcher.match(input_descriptors, descriptors)
         # matches = sorted(matches, key = lambda x : x.distance)
-        num_matches = len(matches)
+
+        num_matches = min(len(matches), num)
         avg_dist = 0
         for i in range(num_matches):
             avg_dist += matches[i].distance
@@ -108,17 +113,17 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset):
     
     dataset_matches.sort(key = lambda x: x[2])
 
-    if dataset_matches[0][2] >= 40:
+    if dataset_matches[0][2] >= 45:
         dataset_matches = []
         for filename, edge_img, keypoints, descriptors in dataset:
 
             matches = matcher.match(input_descriptors, descriptors)
             # matches = sorted(matches, key = lambda x : x.distance)
-            num_matches = len(matches)
+            num_matches = min(len(matches), num)
             avg_dist = 0
-            for i in range(len(matches)):
+            for i in range(num_matches):
                 avg_dist += matches[i].distance
-            avg_dist //= len(matches)
+            avg_dist //= num_matches
 
             dataset_matches.append((filename, num_matches, avg_dist))
     
@@ -143,7 +148,7 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset):
         # DMatch.queryIdx - Index of the descriptor in query descriptors
         # DMatch.imgIdx - Index of the train image.
 
-
+import csv
 
 if __name__ == "__main__":
     # Setting parameter values for Canny
@@ -160,20 +165,42 @@ if __name__ == "__main__":
     w_orientation = set(["voltagesource", "currentsource", "diode"])
 
     dir_str = "../generated_components"
-    for filename in os.listdir(dir_str):
-        img = cv2.imread(f"{dir_str}/{filename}", cv2.IMREAD_GRAYSCALE)
-        classifications = get_component_classifications(orb, t_lower, t_upper, img, dataset)
-        correct_component = filename[:re.search(r'\d', filename).start()]
-        print(f"Supposed to be: {correct_component}")
-        if correct_component in with_orientation:
-            if classifications[0][0][:-1] == correct_component[:-1] or (classifications[1][0][:-1] == correct_component[:-1] and classifications[1][2] == classifications[0][2]):
-                correct += 1
-            if classifications[0][0] == correct_component or (classifications[1][0] == correct_component and classifications[1][2] == classifications[0][2]):
-                correct_orientation += 1
-            total_orientation += 1
-        else:
-            if classifications[0][0] == correct_component:
-                correct += 1
-        total += 1
-        print(f"Correct: {correct}; total: {total}; correct orientation: {correct_orientation}; total orientation: {total_orientation}")
+
+    data = []
+    for n in range(10, 450, 10):
+        total = 0
+        correct = 0
+        correct_orientation = 0
+        total_orientation = 0
+        for filename in os.listdir(dir_str):
+            img = cv2.imread(f"{dir_str}/{filename}", cv2.IMREAD_GRAYSCALE)
+            classifications = get_component_classifications(orb, t_lower, t_upper, img, dataset, n)
+            correct_component = filename[:re.search(r'\d', filename).start()]
+            # print(f"Supposed to be: {correct_component}")
+            if correct_component in with_orientation:
+                if classifications[0][0][:-1] == correct_component[:-1] or (classifications[1][0][:-1] == correct_component[:-1] and classifications[1][2] == classifications[0][2]):
+                    correct += 1
+                if classifications[0][0] == correct_component or (classifications[1][0] == correct_component and classifications[1][2] == classifications[0][2]):
+                    correct_orientation += 1
+                total_orientation += 1
+            else:
+                if classifications[0][0] == correct_component:
+                    correct += 1
+            total += 1
+        data.append({'n': n, 'correct': correct, 'correct_o': correct_orientation})
+        print(f"Num: {n}; Correct: {correct}; total: {total}; correct orientation: {correct_orientation}; total orientation: {total_orientation}")
         print()
+
+    csv_file = 'output.csv'
+
+    # Open the CSV file in write mode and create a CSV writer
+    with open(csv_file, 'w', newline='') as file:
+        fieldnames = ['n', 'correct', 'correct_o']
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+
+        # Write the header
+        writer.writeheader()
+
+        # Write the data for each iteration
+        for item in data:
+            writer.writerow(item)

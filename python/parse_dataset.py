@@ -40,10 +40,15 @@ def get_dataset(orb, t_lower, t_upper):
         # cv2.imshow(f"dataset img: {filename.name}", dataset_edge)
         # cv2.waitKey(0)
         # cv2.destroyAllWindows() 
+
         dataset_keypoints, dataset_descriptors = orb.detectAndCompute(dataset_edge, None)
+
+        # sift = cv2.SIFT_create()
+        # dataset_keypoints, dataset_descriptors = sift.detectAndCompute(dataset_edge,None)
 
         # fast = cv2.FastFeatureDetector_create()
         # dataset_keypoints = fast.detect(dataset_edge, None)
+
         brief = cv2.xfeatures2d.BriefDescriptorExtractor_create()
         dataset_keypoints, dataset_descriptors = brief.compute(dataset_edge, dataset_keypoints)
         # if not dataset_keypoints:
