@@ -280,4 +280,4 @@ if __name__ == "__main__":
     # for filename in os.listdir("../component_images"):
     #     get_edges_subimages(f"../component_images/{filename}")
 
-    get_edges_subimages(f"../component_images/ZZZ.jpg")
+    get_edges_subimages(f"../component_images/switchn1.jpg")

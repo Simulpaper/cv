@@ -33,19 +33,19 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
     cv::Canny(bil, edgeImage, tLower, tUpper);
 
     // cv::imshow("Canny-edged image", edgeImage);
-    // cv::waitKey(0);
+    // cv::waitKey(0); 
 
     int rows = edgeImage.rows;
     int cols = edgeImage.cols;
 
     cv::Mat circles;
     cv::HoughCircles(edgeImage, circles, cv::HOUGH_GRADIENT, 1, std::max(rows, cols),
-                     300, 40, (std::min(rows, cols) / 6), (std::min(rows, cols) / 2));
+                     300, 30, (std::min(rows, cols) / 4), (std::min(rows, cols)) / 2 * 1.2);
 
     std::set<std::string> toCompare;
     // if is a component with a circle
     if (!circles.empty()) {
-        toCompare = {"voltagesourceu", "voltagesourced", "voltagesourcel", "voltagesourcer", "currentsourceu", "currentsourced", "currentsourcel", "currentsourcer", "lightbulb"};
+        toCompare = {"voltagesourceu", "voltagesourced", "voltagesourcel", "voltagesourcer", "currentsourceu", "currentsourced", "currentsourcel", "currentsourcer", "lightbulb", "resistor"};
         std::cout << "Circle in component detected!" << std::endl;
     // is a component with no circle
     } else {

@@ -37,15 +37,17 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset, num):
 
     rows = img.shape[0]
     cols = img.shape[1]
+    # print(f"max x: {cols}; max y: {rows}")
     circles = cv2.HoughCircles(input_edge, cv2.HOUGH_GRADIENT, 1, max(rows, cols),
     param1=300, param2=30,
-    minRadius=(min(rows, cols) // 6), maxRadius=(min(rows, cols)))
+    minRadius=(min(rows, cols) // 4), maxRadius=(int(min(rows, cols) // 2 * 1.2)))
     toCompare = set()
     if circles is not None:
         circles = circles.astype(int)
         circles = circles[0]
-        toCompare = set(["voltagesourceu", "voltagesourced", "currentsourceu", "currentsourced", "voltagesourcer", "voltagesourcel", "currentsourcer", "currentsourcel", "lightbulb"])
+        toCompare = set(["voltagesourceu", "voltagesourced", "currentsourceu", "currentsourced", "voltagesourcer", "voltagesourcel", "currentsourcer", "currentsourcel", "lightbulb", "resistor"])
         print("Circle in component detected!")
+        print(f"detected circle x: {circles[0][0]}, y: {circles[0][1]},  r: {circles[0][2]}")
         circles_img = input_edge.copy()
         circles_img = cv2.circle(circles_img, (circles[0][0], circles[0][1]), circles[0][2], (255, 0, 255), 3)
         cv2.imshow("detected circles", circles_img)
@@ -129,6 +131,10 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset, num):
     
     dataset_matches.sort(key = lambda x: x[2])
 
+    if dataset_matches == []:
+        print("NO MATCHES FOUND!!!!")
+        return [("wire", 1, 1)]
+
     top_three_matches = []
     have = set()
     for component_type, num_matches, avg_dist in dataset_matches:
@@ -176,7 +182,7 @@ if __name__ == "__main__":
             img = cv2.imread(f"{dir_str}/{filename}", cv2.IMREAD_GRAYSCALE)
             classifications = get_component_classifications(orb, t_lower, t_upper, img, dataset, n)
             correct_component = filename[:re.search(r'\d', filename).start()]
-            # print(f"Supposed to be: {correct_component}")
+            print(f"Supposed to be: {correct_component}")
             if correct_component in with_orientation:
                 if classifications[0][0][:-1] == correct_component[:-1] or (classifications[1][0][:-1] == correct_component[:-1] and classifications[1][2] == classifications[0][2]):
                     correct += 1

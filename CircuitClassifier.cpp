@@ -115,7 +115,7 @@ std::vector<std::vector<Component>> CircuitClassifier::getCircuits(std::string i
 int main() {
     CircuitClassifier cClassifier;
 
-    std::vector<std::vector<Component>> bestCircuits = cClassifier.getCircuits("../test_circuits/test6.jpg");
+    std::vector<std::vector<Component>> bestCircuits = cClassifier.getCircuits("../test_circuits/test4-FAILED.jpg");
     for (const auto& circuit : bestCircuits) {
         std::cout << "Circuit edges: [" << std::endl;
         for (const auto& component : circuit) {
