@@ -21,8 +21,10 @@ std::vector<CircuitClassification> generateCircuits(const std::vector<Classified
 
     std::vector<std::vector<ComponentMatch>::iterator> it(numComponents); // Vector of iterators
 
-    std::set<std::string> positiveOrientation = {"voltagesourceu", "currentsourceu", "diodeu", "voltagesourcer", "currentsourcer", "dioder"};
-    std::set<std::string> negativeOrientation = {"voltagesourced", "currentsourced", "dioded", "voltagesourcel", "currentsourcel", "diodel"};
+    // std::set<std::string> positiveOrientation = {"voltagesourceu", "currentsourceu", "diodeu", "voltagesourcer", "currentsourcer", "dioder"};
+    // std::set<std::string> negativeOrientation = {"voltagesourced", "currentsourced", "dioded", "voltagesourcel", "currentsourcel", "diodel"};
+    std::set<std::string> positiveOrientation = {"voltagesourceu", "currentsourceu", "voltagesourcer", "currentsourcer"};
+    std::set<std::string> negativeOrientation = {"voltagesourced", "currentsourced", "voltagesourcel", "currentsourcel"};
 
     // Initialize iterators
     for (int i = 0; i < numComponents; ++i) {
@@ -115,7 +117,7 @@ std::vector<std::vector<Component>> CircuitClassifier::getCircuits(std::string i
 int main() {
     CircuitClassifier cClassifier;
 
-    std::vector<std::vector<Component>> bestCircuits = cClassifier.getCircuits("../test_circuits/test25.jpg");
+    std::vector<std::vector<Component>> bestCircuits = cClassifier.getCircuits("../test_circuits/test12-FAILED.jpg");
     for (const auto& circuit : bestCircuits) {
         std::cout << "Circuit edges: [" << std::endl;
         for (const auto& component : circuit) {

@@ -31,9 +31,9 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset, num):
     # Applying the Canny Edge filter
     input_edge = cv2.Canny(bil, t_lower, t_upper)
 
-    cv2.imshow(f"Canny edged", input_edge)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow(f"Canny edged", input_edge)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     rows = img.shape[0]
     cols = img.shape[1]
@@ -46,13 +46,13 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset, num):
         circles = circles.astype(int)
         circles = circles[0]
         toCompare = set(["voltagesourceu", "voltagesourced", "currentsourceu", "currentsourced", "voltagesourcer", "voltagesourcel", "currentsourcer", "currentsourcel", "lightbulb", "resistor"])
-        print("Circle in component detected!")
-        print(f"detected circle x: {circles[0][0]}, y: {circles[0][1]},  r: {circles[0][2]}")
-        circles_img = input_edge.copy()
-        circles_img = cv2.circle(circles_img, (circles[0][0], circles[0][1]), circles[0][2], (255, 0, 255), 3)
-        cv2.imshow("detected circles", circles_img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        # print("Circle in component detected!")
+        # print(f"detected circle x: {circles[0][0]}, y: {circles[0][1]},  r: {circles[0][2]}")
+        # circles_img = input_edge.copy()
+        # circles_img = cv2.circle(circles_img, (circles[0][0], circles[0][1]), circles[0][2], (255, 0, 255), 3)
+        # cv2.imshow("detected circles", circles_img)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
     else:
         linesP = cv2.HoughLinesP(255 - bil, 2, np.pi / 180, 50, None, 50, 10)
         isWire = True
@@ -73,9 +73,12 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset, num):
                 highY = max(highY, l[3])
             # if is vertical image and difference in Xs is a lot OR is horizontal image and difference in Ys is a lot
             if (bil.shape[0] > bil.shape[1] and highX - lowX > bil.shape[1] // 3)  or (bil.shape[1] > bil.shape[0] and highY - lowY > bil.shape[0] // 3):
-                toCompare = set(["resistor", "dioded", "diodeu", "diodel", "dioder", "switch"])
+                # toCompare = set(["resistor", "dioded", "diodeu", "diodel", "dioder", "switch"])
+                toCompare = set(["resistor", "switch"])
             else:
-                return [("wire", 1, 1)]
+                wire = [("wire", 1, 1)]
+                print(wire)
+                return wire
         else:
             return [("wire", 1, 1)]
 
@@ -110,6 +113,14 @@ def get_component_classifications(orb, t_lower, t_upper, img, dataset, num):
         for i in range(num_matches):
             avg_dist += matches[i].distance
         avg_dist //= num_matches
+
+        # final_img = cv2.drawMatches(input_edge, input_keypoints,
+        # edge_img, keypoints, matches[:20], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+
+        # # Show matches
+        # cv2.imshow(f"Matches for {filename}", final_img)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
 
         dataset_matches.append((filename, num_matches, avg_dist))
     
@@ -167,10 +178,12 @@ if __name__ == "__main__":
     correct = 0
     correct_orientation = 0
     total_orientation = 0
-    with_orientation = set(["voltagesourceu", "voltagesourced", "currentsourceu", "currentsourced", "diodeu", "dioded", "voltagesourcer", "voltagesourcel", "currentsourcer", "currentsourcel", "dioder", "diodel"])
-    w_orientation = set(["voltagesource", "currentsource", "diode"])
+    with_orientation = set(["voltagesourceu", "voltagesourced", "currentsourceu", "currentsourced", "voltagesourcer", "voltagesourcel", "currentsourcer", "currentsourcel"])
+    w_orientation = set(["voltagesource", "currentsource"])
 
     dir_str = "../generated_components"
+    # img = cv2.imread(f"{dir_str}/test04152.jpg", cv2.IMREAD_GRAYSCALE)
+    # cla = get_component_classifications(orb, t_lower, t_upper, img, dataset, 100000)
 
     data = []
     for n in range(450, 451, 10):
@@ -183,6 +196,7 @@ if __name__ == "__main__":
             classifications = get_component_classifications(orb, t_lower, t_upper, img, dataset, n)
             correct_component = filename[:re.search(r'\d', filename).start()]
             print(f"Supposed to be: {correct_component}")
+            print()
             if correct_component in with_orientation:
                 if classifications[0][0][:-1] == correct_component[:-1] or (classifications[1][0][:-1] == correct_component[:-1] and classifications[1][2] == classifications[0][2]):
                     correct += 1

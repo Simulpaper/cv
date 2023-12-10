@@ -68,7 +68,8 @@ std::vector<ComponentMatch> ComponentClassifier::getClassifications(cv::Ptr<cv::
             // img is vertical && horizontal diff is greater than width/3 OR img is horizontal && vertical diff is greater than height/3
             if ((rows > cols && highX - lowX > cols / 3) ||
                 (cols > rows && highY - lowY > rows / 3)) {
-                toCompare = {"resistor", "diodeu", "dioded", "diodel", "dioder", "switch"};
+                // toCompare = {"resistor", "diodeu", "dioded", "diodel", "dioder", "switch"};
+                toCompare = {"resistor", "switch"};
             } else {
                 // is a wire
                 ComponentMatch match;
