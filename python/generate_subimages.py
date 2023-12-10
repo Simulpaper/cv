@@ -27,7 +27,7 @@ def apply_threshold(img):
     cv2.waitKey(0)
     return binary_img
 
-def apply_median_blur(img, ksize=41):
+def apply_median_blur(img, ksize=37):
     b_img = img.copy()
     b_img = cv2.medianBlur(b_img, ksize)
     cv2.imshow("blur img", b_img)

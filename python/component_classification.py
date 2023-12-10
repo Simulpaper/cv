@@ -206,10 +206,13 @@ if __name__ == "__main__":
             else:
                 if classifications[0][0] == correct_component:
                     correct += 1
+            
             total += 1
+            print(f"Num: {n}; Correct: {correct}; total: {total}; correct orientation: {correct_orientation}; total orientation: {total_orientation}")
+            print()
         data.append({'n': n, 'correct': correct, 'correct_o': correct_orientation})
-        print(f"Num: {n}; Correct: {correct}; total: {total}; correct orientation: {correct_orientation}; total orientation: {total_orientation}")
-        print()
+        
+        
 
     # csv_file = 'output.csv'
 
